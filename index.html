@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Men's Barbershop | קביעת תור</title>
+<style>
+:root{
+  --bg:#0a0a0b;--fg:#f4f4f5;--muted:#9a9aa0;--muted2:#6b6b70;
+  --accent:#c8102e;--accent-d:#96081f;--accent-l:#e0455f;--surface:#1a1a1d;--surface2:#141416;--border:#2c2c30;
+  --success:#3ea068;--r-sm:10px;--r-md:14px;--r-lg:18px;--r-xl:22px;--r-full:999px;
+  --sh0:0 1px 4px rgba(0,0,0,.35),0 1px 10px rgba(0,0,0,.25);
+  --sh1:0 3px 12px rgba(0,0,0,.45),0 6px 28px rgba(0,0,0,.35);
+  --sh2:0 6px 24px rgba(0,0,0,.55),0 12px 48px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,'Segoe UI',Arial,sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:70px}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+img,svg{display:block}
+
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+@keyframes ctaGlow{0%,100%{box-shadow:0 4px 22px rgba(200,16,46,.42),var(--sh0)}50%{box-shadow:0 6px 36px rgba(200,16,46,.68),var(--sh0)}}
+@keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.7}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- layout helpers ---------- */
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+@media(max-width:359px){.wrap{padding:0 14px}}
+.section{border-bottom:1px solid var(--border);padding:48px 0}
+@media(min-width:640px){.section{padding:72px 0}}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;letter-spacing:.15em;color:var(--accent);font-weight:700}
+.section-label::before{content:"";display:block;width:24px;height:2px;background:var(--accent)}
+h2.title{margin-top:12px;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+@media(min-width:640px){h2.title{font-size:2rem}}
+@media(min-width:900px){h2.title{font-size:2.4rem}}
+p.lead{margin-top:10px;color:var(--muted);max-width:520px}
+
+/* ---------- buttons: alive on press/hover (physics matched to reference) ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;letter-spacing:.02em;padding:14px 26px;border-radius:var(--r-md);touch-action:manipulation;user-select:none;box-shadow:var(--sh0);
+  transition:transform 55ms cubic-bezier(.4,0,.6,1),box-shadow 110ms ease,opacity 60ms,filter 55ms ease,background-color .2s,color .2s,border-color .2s}
+.btn:not(:disabled):hover:not(:active){box-shadow:var(--sh1);transform:translateY(-2px)}
+.btn:active{transform:scale(.85) translateY(1px)!important;box-shadow:0 1px 4px rgba(0,0,0,.3)!important;opacity:.8;filter:brightness(.88)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-outline{background:var(--surface);color:var(--fg);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-full{width:100%}
+.btn-sm{padding:9px 18px;font-size:.8rem;border-radius:var(--r-sm)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-hero{font-size:1.05rem;padding:16px 32px;animation:ctaGlow 2.8s ease-in-out infinite}
+.btn-hero:active,.btn-hero:not(:active):hover{animation:none}
+
+/* ---------- cards ---------- */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh0)}
+.card-hover{transition:transform 90ms cubic-bezier(.4,0,.6,1),box-shadow 110ms ease,border-color 110ms ease,opacity 60ms;cursor:pointer;touch-action:manipulation}
+.card-hover:not(:active):hover{transform:translateY(-2px);box-shadow:var(--sh1);border-color:#3a3a3f}
+.card-hover:active{transform:scale(.94);box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:.8}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:40;background:rgba(10,10,11,.85);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);border-bottom:1px solid rgba(255,255,255,.06);box-shadow:var(--sh0)}
+.header-row{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;max-width:1100px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{width:42px;height:42px;border:1px solid var(--accent);color:var(--accent);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem}
+.logo-text b{display:block;font-weight:800;font-size:1.05rem;line-height:1}
+.logo-text span{display:block;font-size:.6rem;letter-spacing:.25em;color:var(--muted)}
+nav.desktop-nav{display:none;align-items:center;gap:28px}
+nav.desktop-nav a{font-size:.9rem;font-weight:600;color:var(--muted);transition:color 120ms}
+nav.desktop-nav a:hover{color:var(--accent)}
+.header-actions{display:none;align-items:center;gap:10px}
+@media(min-width:768px){nav.desktop-nav,.header-actions{display:flex}}
+#userChip{font-size:.8rem;color:var(--muted)}
+#userChip b{color:var(--fg)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:1px solid var(--border);text-align:center}
+.hero-bg{position:absolute;inset:0;z-index:-2;background:var(--surface);filter:blur(6px);transform:scale(1.1);display:flex;align-items:center;justify-content:center}
+.hero-bg svg{opacity:.3;color:#555}
+.hero-overlay{position:absolute;inset:0;z-index:-1;background:rgba(0,0,0,.62)}
+.hero-inner{padding:52px 20px 44px;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+@media(min-width:640px){.hero-inner{padding:80px 20px 60px}}
+.hero-logo{width:108px;height:108px;border-radius:50%;border:2.5px solid var(--accent);background:var(--surface2);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(200,16,46,.35),var(--sh0);animation:float 4.5s ease-in-out infinite;margin-bottom:20px}
+.hero h1{font-size:1.9rem;font-weight:800;line-height:1.2;letter-spacing:-.02em}
+@media(min-width:640px){.hero h1{font-size:2.6rem}}
+@media(min-width:900px){.hero h1{font-size:3.4rem}}
+.hero p{margin-top:14px;color:var(--muted);max-width:440px;font-size:1rem}
+@media(min-width:640px){.hero p{font-size:1.1rem}}
+.hero-ctas{margin-top:24px;display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px}
+@media(min-width:640px){.hero-ctas{flex-direction:row;max-width:none;width:auto}}
+.hero-note{position:absolute;bottom:10px;right:20px;font-size:.6rem;color:#555}
+
+/* ---------- active booking banner ---------- */
+.act-bk{margin:20px auto 0;max-width:640px;padding:14px 18px;background:linear-gradient(120deg,rgba(200,16,46,.14),rgba(200,16,46,.05));border:1.5px solid rgba(200,16,46,.35);border-radius:var(--r-lg);display:none;align-items:center;gap:12px;box-shadow:var(--sh0);animation:fadeUp .3s ease}
+.act-bk.on{display:flex}
+.act-bk-pulse{width:9px;height:9px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:dotPulse 2s ease-in-out infinite}
+.act-bk-txt{flex:1;font-size:.85rem;font-weight:600;color:var(--accent-l)}
+
+/* ---------- badges + trust ---------- */
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:22px 20px 0}
+.badge{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-full);padding:6px 14px;font-size:.75rem;font-weight:700;color:var(--accent);box-shadow:var(--sh0)}
+.trust-block{margin:16px auto 0;max-width:560px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);text-align:center;box-shadow:var(--sh0)}
+.trust-block h3{font-size:.95rem;font-weight:800;color:var(--accent);margin-bottom:4px}
+.trust-block p{font-size:.85rem;color:var(--muted)}
+
+/* ---------- tiktok ---------- */
+.tiktok-row{display:flex;flex-direction:column;gap:20px;align-items:flex-start;justify-content:space-between;padding:36px 0}
+@media(min-width:640px){.tiktok-row{flex-direction:row;align-items:center}}
+.tiktok-badge{display:flex;align-items:center;gap:14px}
+.tiktok-icon{width:60px;height:60px;border:1px solid var(--accent);color:var(--accent);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center}
+
+/* ---------- gallery ---------- */
+.gallery-grid{margin-top:36px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:640px){.gallery-grid{grid-template-columns:repeat(3,1fr)}}
+.gallery-item{aspect-ratio:1/1;border:1px dashed #555;border-radius:var(--r-md);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#777;box-shadow:var(--sh0);
+  transition:transform 90ms cubic-bezier(.4,0,.6,1),box-shadow 110ms,border-color 110ms,color 110ms,opacity 65ms;touch-action:manipulation}
+.gallery-item:not(:active):hover{border-color:var(--accent);color:var(--accent);transform:scale(1.025);box-shadow:var(--sh1)}
+.gallery-item:active{transform:scale(.93);opacity:.73}
+.gallery-item span{font-size:.7rem}
+
+/* ---------- services ---------- */
+.services-grid{margin-top:36px;display:grid;gap:16px}
+@media(min-width:768px){.services-grid{grid-template-columns:repeat(3,1fr)}}
+.svc-card{padding:22px;display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+.svc-card.featured{border-color:var(--accent);background:rgba(200,16,46,.08)}
+@media(min-width:768px){.svc-card.featured{grid-column:1/-1;flex-direction:row;align-items:center}}
+.svc-emoji{font-size:2.3rem;margin-bottom:4px}
+.svc-badge{display:inline-block;background:var(--accent);color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.05em;padding:4px 8px;border-radius:var(--r-sm);margin-bottom:8px}
+.svc-name{font-size:1.15rem;font-weight:800}
+.svc-meta{font-size:.85rem;color:var(--muted);margin-top:2px}
+.svc-desc{font-size:.85rem;color:#ccc;margin-top:10px;max-width:420px}
+.svc-price-row{display:flex;align-items:center;gap:8px}
+.svc-price{font-size:1.5rem;font-weight:800}
+.svc-cta{margin-top:8px}
+
+/* ---------- location ---------- */
+.loc-grid{margin-top:36px;display:grid;gap:24px}
+@media(min-width:768px){.loc-grid{grid-template-columns:1fr 1fr}}
+.loc-map{aspect-ratio:16/9;border:1px dashed #555;border-radius:var(--r-md);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#777}
+.loc-map span{font-size:.7rem}
+.loc-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.loc-btns .btn-outline{opacity:.5;pointer-events:none}
+
+/* ---------- footer (phone/whatsapp live here) ---------- */
+footer{padding:44px 20px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+@media(min-width:768px){.footer-inner{flex-direction:row;align-items:center;justify-content:space-between}}
+.contact-block{display:flex;flex-direction:column;gap:14px}
+.contact-btns{display:flex;flex-wrap:wrap;gap:10px}
+.contact-btn{display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:var(--r-md);font-weight:700;font-size:.9rem;box-shadow:var(--sh0);
+  transition:transform 90ms cubic-bezier(.4,0,.6,1),box-shadow 110ms,opacity 60ms}
+.contact-btn.whatsapp{background:#25D366;color:#fff}
+.contact-btn.call{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+.contact-btn:not(:active):hover{transform:translateY(-2px);box-shadow:var(--sh1)}
+.contact-btn:active{transform:scale(.9);opacity:.8}
+.footer-meta{font-size:.8rem;color:var(--muted2)}
+.footer-admin-link{font-size:.7rem;color:#444;margin-top:6px;display:inline-block}
+
+/* ---------- bottom nav (mobile, glass) ---------- */
+.bottom-nav{position:fixed;inset-inline:0;bottom:0;z-index:40;height:72px;display:flex;justify-content:space-around;align-items:center;
+  background:rgba(10,10,11,.85);backdrop-filter:blur(32px) saturate(2.2);-webkit-backdrop-filter:blur(32px) saturate(2.2);
+  border-top:1.5px solid rgba(255,255,255,.08);box-shadow:0 -2px 28px rgba(0,0,0,.4);padding-bottom:env(safe-area-inset-bottom,0)}
+@media(min-width:768px){.bottom-nav{display:none}}
+.bottom-nav a,.bottom-nav button{position:relative;flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:.62rem;font-weight:700;padding:0 2px;
+  transition:color .2s,transform 55ms cubic-bezier(.4,0,.6,1),opacity 60ms}
+@media(max-width:380px){.bottom-nav a,.bottom-nav button{font-size:.56rem}.bottom-nav .icon{width:23px;height:23px}}
+.bottom-nav a:active,.bottom-nav button:active{transform:scale(.8);opacity:.68}
+.bottom-nav .nav-icn{transition:transform .2s cubic-bezier(.34,1.56,.64,1),opacity .2s;opacity:.6}
+.bottom-nav .active-tab{color:var(--accent)}
+.bottom-nav .active-tab .nav-icn{opacity:1;transform:scale(1.15) translateY(-1px)}
+.nav-dot{position:absolute;top:4px;right:22%;width:8px;height:8px;background:var(--accent);border-radius:50%;border:2px solid #0a0a0b;display:none;animation:dotPulse 2s ease-in-out infinite}
+.nav-dot.on{display:block}
+
+/* ---------- icons ---------- */
+.icon{width:27px;height:27px;flex-shrink:0}
+.icon-lg{width:38px;height:38px;flex-shrink:0}
+
+/* ---------- generic sheet (full-screen wizard) ---------- */
+.sheet-overlay{position:fixed;inset:0;z-index:100;background:var(--bg);transform:translateY(100%);transition:transform 380ms cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.sheet-overlay.open{transform:translateY(0)}
+.sheet-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface2);box-shadow:var(--sh0);flex-shrink:0}
+.sheet-dots{display:flex;gap:6px;align-items:center}
+.sheet-dot{height:7px;width:7px;border-radius:50%;background:var(--border);transition:all 300ms cubic-bezier(.4,0,.2,1)}
+.sheet-dot.active{width:24px;border-radius:4px;background:var(--accent)}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;box-shadow:var(--sh0);
+  transition:transform 55ms cubic-bezier(.4,0,.6,1),opacity 60ms}
+.icon-btn:active{transform:scale(.8);opacity:.68}
+.sheet-footer{padding:16px 20px;border-top:1px solid var(--border);background:var(--surface2);flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom,0) + 16px)}
+
+/* wizard sliding track */
+.wiz-track-wrapper{flex:1;overflow:hidden;position:relative;direction:ltr}
+.wiz-track{display:flex;height:100%;width:400%;transition:transform 340ms cubic-bezier(.4,0,.2,1);direction:ltr}
+.wiz-panel{width:25%;height:100%;overflow-y:auto;padding:24px 20px}
+@media(max-width:359px){.wiz-panel{padding:18px 14px}}
+
+.field{display:flex;flex-direction:column;gap:6px;font-size:.85rem;color:var(--muted);margin-bottom:16px}
+.field input,.field select,.field textarea{width:100%;background:#000;border:1.5px solid var(--border);border-radius:var(--r-md);padding:12px 14px;color:var(--fg);font-size:1rem;font-family:inherit;transition:border-color .2s,box-shadow .2s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(200,16,46,.16)}
+.radio-row{display:flex;gap:16px}
+.radio-row label{display:flex;align-items:center;gap:6px;color:var(--fg);font-size:.9rem}
+
+/* wizard: services */
+.wiz-svc{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:16px;margin-bottom:10px;touch-action:manipulation}
+.wiz-svc.sel{border-color:var(--accent);background:rgba(200,16,46,.1)}
+.wiz-svc .n{font-weight:700}
+.wiz-svc .d{font-size:.8rem;color:var(--muted);margin-top:2px}
+.wiz-svc .p{font-weight:800;font-size:1.1rem;flex-shrink:0}
+
+/* wizard: calendar */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav b{font-size:1rem}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;direction:ltr}
+.cal-dname{font-size:.7rem;font-weight:700;color:#666;padding:4px 0 10px}
+.cal-day{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;color:var(--fg);
+  transition:transform 55ms cubic-bezier(.4,0,.6,1),opacity 60ms,background 150ms;touch-action:manipulation}
+.cal-day:hover:not(:disabled){background:var(--surface)}
+.cal-day:active:not(:disabled){transform:scale(.74);opacity:.68}
+.cal-day.sel{background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(200,16,46,.42)}
+.cal-day:disabled{color:#333}
+.cal-day.today:not(.sel){color:var(--accent);font-weight:800}
+
+/* wizard: time slots */
+.tg-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#666;margin:16px 0 8px}
+.tg-label:first-child{margin-top:0}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:380px){.time-grid{grid-template-columns:repeat(3,1fr)}}
+.t-slot{padding:12px 4px;border-radius:var(--r-sm);background:var(--surface);border:1.5px solid var(--border);font-size:.85rem;font-weight:600;color:var(--fg);box-shadow:var(--sh0);
+  transition:transform 55ms cubic-bezier(.4,0,.6,1),opacity 60ms,background 150ms,border-color 150ms}
+.t-slot:active{transform:scale(.83);opacity:.66}
+.t-slot.sel{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 3px 12px rgba(200,16,46,.4)}
+
+/* otp / demo banner */
+.demo-banner{border:1.5px dashed var(--accent);background:rgba(200,16,46,.1);border-radius:var(--r-md);padding:14px;font-size:.85rem;margin-bottom:16px}
+.demo-banner b{color:var(--accent);display:block;margin-bottom:4px}
+.demo-code{font-family:monospace;font-size:1.3rem;letter-spacing:.1em;color:#fff}
+.otp-input{width:130px;text-align:center;font-size:1.2rem;letter-spacing:.3em}
+
+.error-text{color:var(--accent);font-size:.85rem;margin-top:8px}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px;box-shadow:0 8px 24px rgba(200,16,46,.4)}
+
+/* ---------- registration: bottom sheet (rounded, not full screen) ---------- */
+.reg-overlay{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity 320ms ease;display:flex;align-items:flex-end;justify-content:center}
+.reg-overlay.open{opacity:1;pointer-events:auto}
+.reg-sheet-body{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;padding:10px 20px 34px;width:100%;max-width:480px;
+  transform:translateY(100%);transition:transform 380ms cubic-bezier(.4,0,.2,1);box-shadow:0 -8px 40px rgba(0,0,0,.55)}
+.reg-overlay.open .reg-sheet-body{transform:translateY(0)}
+.reg-handle{width:38px;height:4px;background:var(--border);border-radius:4px;margin:10px auto 20px}
+
+/* lightbox */
+#lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.97);display:none;flex-direction:column;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+.lb-close{position:absolute;top:max(20px,env(safe-area-inset-top));left:20px}
+.lb-counter{position:absolute;top:max(24px,env(safe-area-inset-top));color:#777;font-size:.85rem}
+.lb-arr{position:absolute;top:50%;transform:translateY(-50%);font-size:1.6rem}
+.lb-arr.prev{right:16px}
+.lb-arr.next{left:16px}
+.lb-box{width:260px;max-width:80vw;aspect-ratio:1;border:1px dashed #555;border-radius:var(--r-md);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#777}
+
+/* full-screen page (settings / my-booking / admin) */
+.page-screen{position:fixed;inset:0;z-index:150;background:var(--bg);display:none;overflow-y:auto}
+.page-screen.open{display:block}
+.page-head{position:sticky;top:0;display:flex;align-items:center;gap:14px;padding:14px 20px;background:rgba(10,10,11,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);z-index:2}
+.page-head h2{font-weight:800;font-size:1.2rem;flex:1}
+.s-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.s-row:last-child{border-bottom:none}
+.s-label{font-size:1rem;font-weight:600}
+.s-sub{font-size:.8rem;color:var(--muted);margin-top:3px}
+.s-head{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+
+/* my booking */
+.mb-empty{text-align:center;padding:70px 24px 40px;color:var(--muted)}
+.mb-empty .ei{font-size:52px;margin-bottom:14px;opacity:.5}
+.mb-hero{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh2);margin-bottom:22px}
+.mb-hero-top{background:linear-gradient(150deg,var(--accent-d),var(--accent));padding:26px 22px 22px;color:#fff;position:relative}
+.mb-hero-badge{position:absolute;top:18px;left:18px;background:rgba(0,0,0,.25);border-radius:var(--r-full);padding:5px 14px;font-size:.7rem;font-weight:800;backdrop-filter:blur(6px)}
+.mb-hero-emoji{font-size:2.6rem;margin-bottom:6px}
+.mb-hero-name{font-size:1.3rem;font-weight:800}
+.mb-hero-price{font-size:.9rem;opacity:.85;font-weight:600;margin-bottom:18px}
+.mb-stats{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;align-items:center;background:rgba(0,0,0,.18);border-radius:var(--r-lg);padding:14px 8px}
+.mb-stat{text-align:center}
+.mb-stat b{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;opacity:.75;font-weight:800;margin-bottom:4px}
+.mb-stat span{font-size:1.3rem;font-weight:900}
+.mb-div{height:32px;background:rgba(255,255,255,.25)}
+.mb-hero-bottom{background:var(--accent-d);padding:0 18px 18px}
+.mb-steps{display:flex;padding:20px 4px 4px;gap:0}
+.mb-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.mb-step-row{display:flex;align-items:center;width:100%}
+.mb-step-line{flex:1;height:2px;background:var(--border)}
+.mb-step-line.done{background:var(--accent)}
+.mb-step-dot{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mb-step-dot.done{border-color:var(--accent);background:var(--accent)}
+.mb-step-lbl{font-size:.7rem;font-weight:700;color:var(--muted)}
+.mb-step-lbl.done{color:var(--accent)}
+.mb-list-item{display:flex;align-items:center;gap:14px;padding:12px 14px;margin-bottom:8px}
+.mb-list-item .e{font-size:1.6rem}
+.status-pill{font-size:.7rem;padding:4px 10px;border-radius:var(--r-sm);font-weight:700}
+.status-pill.pending{background:rgba(200,16,46,.18);color:var(--accent-l)}
+.status-pill.confirmed{background:rgba(255,255,255,.1);color:#ccc}
+.status-pill.completed{background:rgba(62,160,104,.18);color:var(--success)}
+.status-pill.cancelled{background:rgba(255,255,255,.06);color:#666}
+
+/* admin (reuses page-screen) */
+.admin-wrap{max-width:960px;margin:0 auto;padding:32px 20px 60px}
+.admin-login-box{max-width:360px;margin:80px auto 0;padding:32px}
+.admin-tabs{display:flex;gap:6px;margin-bottom:24px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh0)}
+.admin-tab{flex:1;padding:11px 6px;text-align:center;background:var(--surface);font-size:.85rem;font-weight:700;color:#777;transition:background .2s,color .2s,transform 55ms}
+.admin-tab:active{transform:scale(.94)}
+.admin-tab.active{background:var(--accent);color:#fff}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:right;padding:10px 12px;background:var(--surface2);color:var(--muted);font-weight:600}
+td{padding:10px 12px;border-top:1px solid var(--border)}
+.monitor-grid{display:grid;gap:16px}
+@media(min-width:768px){.monitor-grid{grid-template-columns:repeat(3,1fr)}}
+.mon-col-head{display:flex;justify-content:space-between;align-items:center;padding:0 2px 8px}
+.mon-count{background:var(--surface);border-radius:var(--r-full);padding:1px 8px;font-size:.75rem;color:var(--muted)}
+.mon-card{padding:12px;margin-bottom:8px;border-right:3.5px solid var(--border);position:relative}
+.mon-card.pending{border-color:var(--accent)}
+.mon-card.confirmed{border-color:#888}
+.mon-card.completed{border-color:var(--success)}
+.mon-card.is-today::after{content:'●';position:absolute;top:8px;left:10px;font-size:7px;color:var(--accent);animation:dotPulse 2s ease-in-out infinite}
+.mon-time{font-size:1.1rem;font-weight:800}
+.mon-name{font-size:.85rem;margin-top:2px}
+.mon-svc{font-size:.75rem;color:var(--muted);margin-top:2px}
+
+.toast{position:fixed;top:max(20px,env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-140%);background:#1c1c1e;color:#fff;padding:12px 24px;border-radius:var(--r-md);font-size:.85rem;font-weight:600;z-index:300;
+  transition:transform 220ms ease;box-shadow:var(--sh1)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <a href="#top" class="logo">
+      <span class="logo-mark">M</span>
+      <span class="logo-text"><b>MEN'S</b><span>BARBERSHOP</span></span>
+    </a>
+    <nav class="desktop-nav">
+      <a href="#services">שירותים</a>
+      <a href="#gallery">גלריה</a>
+      <a href="#location">מיקום</a>
+      <a href="#" onclick="openSettings();return false;">הגדרות</a>
+    </nav>
+    <div class="header-actions">
+      <span id="userChip" class="hidden"></span>
+      <button class="btn btn-outline btn-sm" id="registerBtnHeader" onclick="openRegisterOrAccount()">הרשמה</button>
+      <button class="btn btn-primary btn-sm" onclick="tryBook()">קבע תור</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg">
+    <svg viewBox="0 0 24 24" width="220" height="220" fill="none" stroke="currentColor" stroke-width="1.2">
+      <path d="M4 8.5C4 7.7 4.7 7 5.5 7H8l1-1.5A1.5 1.5 0 0 1 10.2 5h3.6c.5 0 1 .2 1.2.5L16 7h2.5c.8 0 1.5.7 1.5 1.5v9c0 .8-.7 1.5-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/>
+      <circle cx="12" cy="13" r="3.2"/>
+    </svg>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-logo">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--accent)">
+        <circle cx="6" cy="6" r="3.4"/><circle cx="6" cy="18" r="3.4"/>
+        <path d="M20 4 8.5 15.5M8.5 8.5 20 20M9 12l1-1"/>
+      </svg>
+    </div>
+    <span class="section-label">MEN'S BARBERSHOP</span>
+    <h1>תספורת בסטנדרט גבוה,<br>לגבר שיודע מה הוא רוצה.</h1>
+    <p>קביעת תור אונליין, טיפוח וטיפולי VIP — במקום אחד. בעלים: נתאנאל דיין.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primary btn-hero" onclick="tryBook()">קבע תור עכשיו</button>
+      <a class="btn btn-outline" href="https://www.tiktok.com/@.mans_barber" target="_blank" rel="noopener">עקבו בטיקטוק</a>
+    </div>
+  </div>
+  <p class="hero-note">רקע: תמונת עבודה מטושטשת מהמספרה — להחלפה</p>
+</section>
+
+<div class="wrap">
+  <div class="act-bk" id="actBkBanner">
+    <div class="act-bk-pulse"></div>
+    <div class="act-bk-txt" id="actBkTxt"></div>
+    <button class="btn btn-outline btn-sm" onclick="openMyBooking()">הפרטים שלי</button>
+  </div>
+  <div class="badge-row">
+    <span class="badge">תספורת מקצועית</span>
+    <span class="badge">טיפוח VIP</span>
+    <span class="badge">קביעת תור אונליין</span>
+    <span class="badge">זמינות מהירה</span>
+  </div>
+  <div class="trust-block">
+    <h3>ניקיון וסטריליות בראש סדר העדיפויות</h3>
+    <p>כלים מחוטאים לכל תספורת · מוצרי טיפוח מקצועיים בלבד</p>
+  </div>
+</div>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <span class="section-label">תפריט</span>
+    <h2 class="title">שירותים ומחירון</h2>
+    <div class="services-grid" id="servicesGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="wrap">
+    <span class="section-label">עבודות</span>
+    <h2 class="title">גלריית תספורות</h2>
+    <p class="lead">כאן ייכנסו תמונות אמיתיות של העבודות מהמספרה. המשבצות הן מקום שמור להחלפה.</p>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="location">
+  <div class="wrap">
+    <span class="section-label">מיקום</span>
+    <h2 class="title">איפה נמצאים</h2>
+    <div class="loc-grid">
+      <div class="loc-map">
+        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 19 9.5C19 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <span>מפה — להטמעה לאחר קבלת הכתובת</span>
+      </div>
+      <div>
+        <h3 style="font-weight:800;font-size:1.05rem">כתובת המספרה</h3>
+        <p style="color:var(--muted);margin-top:4px">להשלמה על ידי בעל העסק</p>
+        <div class="loc-btns">
+          <span class="btn btn-outline btn-sm">פתח בגוגל מפות</span>
+          <span class="btn btn-outline btn-sm">פתח בוויז</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap tiktok-row">
+  <div class="tiktok-badge">
+    <span class="tiktok-icon">
+      <svg class="icon" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3.2v13.7c0 1.4-1.1 2.6-2.6 2.6a2.6 2.6 0 0 1-2.6-2.6c0-1.4 1.1-2.6 2.6-2.6.3 0 .5 0 .8.1V9.9a5.9 5.9 0 0 0-.8 0A5.8 5.8 0 0 0 5 15.7a5.8 5.8 0 0 0 5.8 5.8 5.8 5.8 0 0 0 5.8-5.8V8.6a8 8 0 0 0 4.4 1.3V6.7a4.8 4.8 0 0 1-4.5-4.7Z"/></svg>
+    </span>
+    <div>
+      <h2 style="font-weight:800;font-size:1.1rem">עקבו אחרינו בטיקטוק</h2>
+      <p style="color:var(--muted);font-size:.85rem">@.mans_barber</p>
+    </div>
+  </div>
+  <a class="btn btn-primary" href="https://www.tiktok.com/@.mans_barber" target="_blank" rel="noopener">לצפייה בעבודות</a>
+</section>
+
+<footer id="myBooking">
+  <div class="footer-inner">
+    <div class="contact-block">
+      <h3 style="font-weight:800">צור קשר</h3>
+      <div class="contact-btns">
+        <a class="contact-btn whatsapp" href="https://wa.me/972507485728" target="_blank" rel="noopener">
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4a.6.6 0 0 0 0-.6c-.1-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+          וואטסאפ
+        </a>
+        <a class="contact-btn call" href="tel:+972507485728">
+          <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5c0-1.1.9-2 2-2h2.3c.5 0 1 .3 1.2.8l1.3 3a1.3 1.3 0 0 1-.4 1.5l-1.5 1.2a12.5 12.5 0 0 0 5.6 5.6l1.2-1.5a1.3 1.3 0 0 1 1.5-.4l3 1.3c.5.2.8.7.8 1.2V19c0 1.1-.9 2-2 2h-1C8.6 21 3 15.4 3 8.5V5Z"/></svg>
+          050-748-5728
+        </a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <p>בבעלות נתאנאל דיין</p>
+      <p>© <span id="year"></span> Men's Barbershop</p>
+      <a href="#" class="footer-admin-link" onclick="openAdmin();return false;">כניסת מנהל</a>
+    </div>
+  </div>
+</footer>
+
+<nav class="bottom-nav">
+  <a href="#top" class="active-tab" id="navHome">
+    <svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-4.5a.5.5 0 0 1-.5-.5V15a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5.5a.5.5 0 0 1-.5.5H4a1 1 0 0 1-1-1Z"/></svg>
+    בית
+    <span class="nav-dot" id="navDot"></span>
+  </a>
+  <a href="#gallery" id="navGallery">
+    <svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8.5C4 7.7 4.7 7 5.5 7H8l1-1.5A1.5 1.5 0 0 1 10.2 5h3.6c.5 0 1 .2 1.2.5L16 7h2.5c.8 0 1.5.7 1.5 1.5v9c0 .8-.7 1.5-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="13" r="3.2"/></svg>
+    גלריה
+  </a>
+  <button onclick="tryBook()" style="color:var(--accent)">
+    <svg class="icon nav-icn" style="opacity:1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v6M9 16h6"/></svg>
+    קביעת תור
+  </button>
+  <a href="#" id="navMyBk" class="hidden" onclick="openMyBooking();return false;">
+    <svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="2" fill="currentColor"/></svg>
+    התור שלי
+  </a>
+  <a href="#" id="navSettings" onclick="openSettings();return false;">
+    <svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    הגדרות
+  </a>
+</nav>
+
+<!-- ===== Registration bottom sheet ===== -->
+<div class="reg-overlay" id="regSheet">
+  <div class="reg-sheet-body">
+    <div class="reg-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span style="font-weight:800;font-size:1.1rem">הרשמה</span>
+      <button class="icon-btn" onclick="closeSheet('regSheet')">✕</button>
+    </div>
+    <div id="regBody"></div>
+  </div>
+</div>
+
+<!-- ===== Booking wizard: full-screen sliding sheet ===== -->
+<div class="sheet-overlay" id="wizSheet">
+  <div class="sheet-header">
+    <button class="icon-btn" id="wizBackBtn" onclick="wizBack()">‹</button>
+    <div class="sheet-dots" id="wizDots"></div>
+    <button class="icon-btn" onclick="closeSheet('wizSheet')">✕</button>
+  </div>
+  <div class="wiz-track-wrapper">
+    <div class="wiz-track" id="wizTrack">
+      <div class="wiz-panel" dir="rtl" id="wizPanel0"></div>
+      <div class="wiz-panel" dir="rtl" id="wizPanel1"></div>
+      <div class="wiz-panel" dir="rtl" id="wizPanel2"></div>
+      <div class="wiz-panel" dir="rtl" id="wizPanel3"></div>
+    </div>
+  </div>
+  <div class="sheet-footer" id="wizFooter"></div>
+</div>
+
+<!-- ===== Lightbox ===== -->
+<div id="lightbox">
+  <button class="icon-btn lb-close" onclick="closeLightbox()">✕</button>
+  <span class="lb-counter" id="lbCounter"></span>
+  <button class="icon-btn lb-arr prev" onclick="lbNav(-1)">›</button>
+  <div class="lb-box">
+    <svg class="icon-lg" style="width:52px;height:52px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 8.5C4 7.7 4.7 7 5.5 7H8l1-1.5A1.5 1.5 0 0 1 10.2 5h3.6c.5 0 1 .2 1.2.5L16 7h2.5c.8 0 1.5.7 1.5 1.5v9c0 .8-.7 1.5-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="13" r="3.2"/></svg>
+    <span>תמונה — להחלפה</span>
+  </div>
+  <button class="icon-btn lb-arr next" onclick="lbNav(1)">‹</button>
+</div>
+
+<!-- ===== Settings screen ===== -->
+<div id="settingsScreen" class="page-screen">
+  <div class="page-head">
+    <button class="icon-btn" onclick="closeSettings()">✕</button>
+    <h2>הגדרות</h2>
+  </div>
+  <div class="admin-wrap" id="settingsBody"></div>
+</div>
+
+<!-- ===== My Booking screen ===== -->
+<div id="myBookingScreen" class="page-screen">
+  <div class="page-head">
+    <button class="icon-btn" onclick="closeMyBooking()">✕</button>
+    <h2>התור שלי</h2>
+  </div>
+  <div class="admin-wrap" id="myBookingBody"></div>
+</div>
+
+<!-- ===== Admin screen ===== -->
+<div id="adminScreen" class="page-screen">
+  <div class="admin-wrap">
+    <div id="adminLogin">
+      <div class="card admin-login-box">
+        <h2 style="font-weight:800;margin-bottom:18px">כניסת מנהל (דמו)</h2>
+        <div class="field"><label>סיסמה</label><input type="password" id="adminPwd"></div>
+        <p class="error-text hidden" id="adminErr">סיסמה שגויה</p>
+        <button class="btn btn-primary btn-full" style="margin-top:12px" onclick="doAdminLogin()">כניסה</button>
+        <button class="btn btn-outline btn-full" style="margin-top:10px" onclick="closeAdmin()">חזרה לאתר</button>
+      </div>
+    </div>
+    <div id="adminDash" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h2 style="font-weight:800;font-size:1.4rem">לוח ניהול (דמו)</h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm" onclick="adminLogout()">התנתקות</button>
+          <button class="btn btn-outline btn-sm" onclick="closeAdmin()">לאתר</button>
+        </div>
+      </div>
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="bookings" onclick="setAdminTab('bookings')">תורים</button>
+        <button class="admin-tab" data-tab="clients" onclick="setAdminTab('clients')">לקוחות</button>
+      </div>
+      <div id="adminTabBookings"></div>
+      <div id="adminTabClients" class="hidden"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ================= DATA ================= */
+const SERVICES = [
+  {id:'haircut', emoji:'✂️', name:'תספורת גברים', duration:'45 דקות', price:80},
+  {id:'haircut-beard', emoji:'🪒', name:'תספורת + עיצוב זקן', duration:'60 דקות', price:110},
+  {id:'vip', emoji:'✨', name:'יום פינוק VIP', duration:'שעתיים שלמות', price:300, featured:true,
+    desc:'טיפול פנים במגבות חמות, מסכת פנים, משחה שחורה ותספורת מלאה — מושלם למי שיש לו אירוע ורוצה לפנק את עצמו.'},
+];
+const TIME_SLOTS = (()=>{
+  const out=[]; for(let i=0;i<21;i++){const t=9*60+i*30;const h=String(Math.floor(t/60)).padStart(2,'0');const m=String(t%60).padStart(2,'0');out.push(h+':'+m);} return out;
+})();
+const MONTH_NAMES=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const DAY_NAMES=['א','ב','ג','ד','ה','ו','ש'];
+const ADMIN_PASSWORD='barber2026';
+const STORAGE_KEY='barbershop_demo_v1';
+
+/* ================= STATE ================= */
+const DEFAULTS={currentUser:null, clients:[], bookings:[]};
+function loadState(){
+  try{const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return structuredClone(DEFAULTS);
+    return {...structuredClone(DEFAULTS), ...JSON.parse(raw)};
+  }catch{return structuredClone(DEFAULTS);}
+}
+let state=loadState();
+let adminAuthed=false;
+function persist(){localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}
+
+function todayIso(){return new Date().toISOString().slice(0,10);}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2400);}
+
+/* ================= HEADER / USER CHIP / ACTIVE BOOKING BANNER ================= */
+function getMyBookings(){
+  if(!state.currentUser) return [];
+  return state.bookings.filter(b=>b.clientPhone===state.currentUser.phone && b.status!=='cancelled');
+}
+function renderHeader(){
+  const chip=document.getElementById('userChip');
+  const regBtn=document.getElementById('registerBtnHeader');
+  if(state.currentUser){
+    chip.classList.remove('hidden');
+    chip.innerHTML='שלום, <b>'+state.currentUser.name+'</b>';
+    regBtn.textContent='התנתק';
+    regBtn.onclick=logoutUser;
+  }else{
+    chip.classList.add('hidden');
+    regBtn.textContent='הרשמה';
+    regBtn.onclick=()=>openRegisterOrAccount();
+  }
+  updateBanner();
+}
+function updateBanner(){
+  const bks=getMyBookings();
+  const banner=document.getElementById('actBkBanner');
+  const dot=document.getElementById('navDot');
+  const myBkNav=document.getElementById('navMyBk');
+  if(bks.length>0){
+    banner.classList.add('on');
+    const today=todayIso();
+    const next=[...bks].sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''))
+      .find(b=>b.date>=today) || bks[0];
+    document.getElementById('actBkTxt').textContent = `${next.service} · ${next.date} · ${next.time}`;
+    myBkNav.classList.remove('hidden');
+  }else{
+    banner.classList.remove('on');
+    myBkNav.classList.add('hidden');
+  }
+  dot.classList.toggle('on', bks.length>0);
+}
+function logoutUser(){state.currentUser=null;persist();renderHeader();showToast('התנתקת');}
+function openRegisterOrAccount(){
+  if(state.currentUser){openSettings();return;}
+  openRegister(null);
+}
+
+/* ================= SETTINGS ================= */
+function openSettings(){
+  renderSettings();
+  document.getElementById('settingsScreen').classList.add('open');
+  document.body.style.overflow='hidden';
+  setActiveNav('navSettings');
+}
+function closeSettings(){
+  document.getElementById('settingsScreen').classList.remove('open');
+  document.body.style.overflow='';
+  updateActiveNavByScroll();
+}
+function editProfile(){
+  openRegister(null, {name:state.currentUser.name, phone:state.currentUser.phone});
+}
+function renderSettings(){
+  const body=document.getElementById('settingsBody');
+  const u=state.currentUser;
+  body.innerHTML=`
+    <div class="card" style="padding:18px;margin:20px 0">
+      <div class="s-head">חשבון</div>
+      ${u?`
+        <div class="s-row" style="border:none">
+          <div><div class="s-label">${u.name}</div><div class="s-sub">${u.phone}</div></div>
+          <button class="btn btn-outline btn-sm" onclick="editProfile()">עריכה</button>
+        </div>
+        <div class="s-row" style="border:none;padding-top:0">
+          <button class="btn btn-outline btn-sm btn-full" onclick="logoutUser();renderSettings();">התנתקות</button>
+        </div>`:`
+        <div class="s-row" style="border:none">
+          <div class="s-label" style="color:var(--muted)">לא מחובר</div>
+          <button class="btn btn-primary btn-sm" onclick="openRegister(null)">הרשמה</button>
+        </div>`}
+    </div>
+    <div class="card" style="padding:18px;margin-bottom:20px">
+      <div class="s-head">אודות המספרה</div>
+      <div class="s-row" style="border:none">
+        <div class="s-label" style="display:flex;align-items:center;gap:8px">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)"><path d="M3 5c0-1.1.9-2 2-2h2.3c.5 0 1 .3 1.2.8l1.3 3a1.3 1.3 0 0 1-.4 1.5l-1.5 1.2a12.5 12.5 0 0 0 5.6 5.6l1.2-1.5a1.3 1.3 0 0 1 1.5-.4l3 1.3c.5.2.8.7.8 1.2V19c0 1.1-.9 2-2 2h-1C8.6 21 3 15.4 3 8.5V5Z"/></svg>
+          050-748-5728
+        </div>
+        <a class="btn btn-outline btn-sm" href="tel:+972507485728">התקשר</a>
+      </div>
+      <div class="s-row">
+        <div class="s-label" style="display:flex;align-items:center;gap:8px">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="color:#25D366"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4a.6.6 0 0 0 0-.6c-.1-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l4.9-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+          וואטסאפ
+        </div>
+        <a class="btn btn-outline btn-sm" href="https://wa.me/972507485728" target="_blank" rel="noopener">פתח</a>
+      </div>
+      <div class="s-row">
+        <div class="s-label" style="display:flex;align-items:center;gap:8px">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3.2v13.7c0 1.4-1.1 2.6-2.6 2.6a2.6 2.6 0 0 1-2.6-2.6c0-1.4 1.1-2.6 2.6-2.6.3 0 .5 0 .8.1V9.9a5.9 5.9 0 0 0-.8 0A5.8 5.8 0 0 0 5 15.7a5.8 5.8 0 0 0 5.8 5.8 5.8 5.8 0 0 0 5.8-5.8V8.6a8 8 0 0 0 4.4 1.3V6.7a4.8 4.8 0 0 1-4.5-4.7Z"/></svg>
+          טיקטוק
+        </div>
+        <a class="btn btn-outline btn-sm" href="https://www.tiktok.com/@.mans_barber" target="_blank" rel="noopener">פתח</a>
+      </div>
+    </div>
+    <div class="footer-meta" style="text-align:center;padding-bottom:20px">בבעלות נתאנאל דיין · Men's Barbershop</div>`;
+}
+
+/* ================= MY BOOKING ================= */
+function openMyBooking(){
+  renderMyBooking();
+  document.getElementById('myBookingScreen').classList.add('open');
+  document.body.style.overflow='hidden';
+  setActiveNav('navMyBk');
+}
+function closeMyBooking(){
+  document.getElementById('myBookingScreen').classList.remove('open');
+  document.body.style.overflow='';
+  updateActiveNavByScroll();
+}
+function cancelMyBooking(id){
+  const b=state.bookings.find(x=>x.id===id);
+  if(b){ b.status='cancelled'; persist(); renderMyBooking(); renderHeader(); showToast('התור בוטל'); }
+}
+function renderMyBooking(){
+  const body=document.getElementById('myBookingBody');
+  if(!state.currentUser || !state.bookings.some(b=>b.clientPhone===state.currentUser.phone)){
+    body.innerHTML=`<div class="mb-empty"><div class="ei">📅</div><div style="font-weight:700;color:var(--fg);margin-bottom:6px">אין תורים פעילים</div><div>קבעו תור — והוא יופיע כאן</div></div>`;
+    return;
+  }
+  const all=state.bookings.filter(b=>b.clientPhone===state.currentUser.phone);
+  const today=todayIso();
+  const statusLabel={pending:'ממתין',confirmed:'מאושר',completed:'הושלם',cancelled:'בוטל'};
+  const upcoming=all.filter(b=>b.date>=today && b.status!=='cancelled' && b.status!=='completed').sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+  const history=all.filter(b=>b.date<today || b.status==='completed' || b.status==='cancelled').sort((a,b)=>b.date.localeCompare(a.date));
+  const next=upcoming[0];
+  let html='<div style="padding-top:20px">';
+  if(next){
+    const spaceIdx=next.service.indexOf(' ');
+    const emoji=next.service.slice(0,spaceIdx);
+    const name=next.service.slice(spaceIdx+1);
+    const svc=SERVICES.find(s=>s.name===name);
+    const [y,m,d]=next.date.split('-');
+    const daysLeft=Math.round((new Date(next.date)-new Date(today))/86400000);
+    const daysLbl=daysLeft===0?'היום!':daysLeft===1?'מחר':daysLeft>1?`בעוד ${daysLeft} ימים`:'';
+    const dayNames=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+    const dow=dayNames[new Date(next.date).getDay()];
+    html+=`<div class="mb-hero">
+      <div class="mb-hero-top">
+        ${daysLbl?`<div class="mb-hero-badge">${daysLbl}</div>`:''}
+        <div class="mb-hero-emoji">${emoji}</div>
+        <div class="mb-hero-name">${name}</div>
+        <div class="mb-hero-price">${svc?'₪'+svc.price:''}</div>
+        <div class="mb-stats">
+          <div class="mb-stat"><b>יום</b><span>${dow}</span></div>
+          <div class="mb-div"></div>
+          <div class="mb-stat"><b>תאריך</b><span>${d}.${m}</span></div>
+          <div class="mb-div"></div>
+          <div class="mb-stat"><b>שעה</b><span>${next.time}</span></div>
+        </div>
+      </div>
+      ${next.status==='pending'?`<div class="mb-hero-bottom"><button class="btn btn-full" style="background:rgba(0,0,0,.2);border:1.5px solid rgba(255,255,255,.4);color:#fff" onclick="cancelMyBooking('${next.id}')">ביטול תור</button></div>`:''}
+    </div>`;
+    const steps=['pending','confirmed','completed'];
+    const stepLbl={pending:'ממתין',confirmed:'אושר',completed:'הושלם'};
+    const cur=steps.indexOf(next.status);
+    html+='<div class="mb-steps">';
+    steps.forEach((s,i)=>{
+      const done=cur>=i;
+      html+=`<div class="mb-step">
+        <div class="mb-step-row">
+          ${i>0?`<div class="mb-step-line${cur>=i?' done':''}"></div>`:'<div style="flex:1"></div>'}
+          <div class="mb-step-dot${done?' done':''}">${done?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':''}</div>
+          ${i<2?`<div class="mb-step-line${cur>i?' done':''}"></div>`:'<div style="flex:1"></div>'}
+        </div>
+        <div class="mb-step-lbl${done?' done':''}">${stepLbl[s]}</div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  if(upcoming.length>1){
+    html+='<p class="s-head" style="margin:24px 0 10px">תורים נוספים</p>';
+    upcoming.slice(1).forEach(b=>{
+      const spaceIdx=b.service.indexOf(' ');
+      const emoji=b.service.slice(0,spaceIdx), name=b.service.slice(spaceIdx+1);
+      const [y,m,d]=b.date.split('-');
+      html+=`<div class="card mb-list-item"><div class="e">${emoji}</div><div style="flex:1"><div style="font-weight:700">${name}</div><div style="font-size:.8rem;color:var(--muted);margin-top:2px">${d}.${m} · ${b.time}</div></div><span class="status-pill ${b.status}">${statusLabel[b.status]}</span></div>`;
+    });
+  }
+  if(history.length){
+    html+='<p class="s-head" style="margin:24px 0 10px">היסטוריה</p>';
+    history.slice(0,10).forEach(b=>{
+      const spaceIdx=b.service.indexOf(' ');
+      const emoji=b.service.slice(0,spaceIdx), name=b.service.slice(spaceIdx+1);
+      const [y,m,d]=b.date.split('-');
+      html+=`<div class="card mb-list-item" style="opacity:.7"><div class="e">${emoji}</div><div style="flex:1"><div style="font-weight:600">${name}</div><div style="font-size:.75rem;color:var(--muted);margin-top:2px">${d}.${m} · ${b.time}</div></div><span class="status-pill ${b.status}">${statusLabel[b.status]}</span></div>`;
+    });
+  }
+  html+='<div style="height:20px"></div></div>';
+  body.innerHTML=html;
+}
+
+/* ================= DOCK ACTIVE STATE ================= */
+function setActiveNav(id){
+  document.querySelectorAll('.bottom-nav a').forEach(el=>el.classList.remove('active-tab'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active-tab');
+}
+function updateActiveNavByScroll(){
+  if(document.getElementById('settingsScreen').classList.contains('open')) return;
+  if(document.getElementById('myBookingScreen').classList.contains('open')) return;
+  if(document.getElementById('adminScreen').classList.contains('open')) return;
+  const galleryTop=document.getElementById('gallery').getBoundingClientRect().top;
+  setActiveNav(galleryTop > window.innerHeight*0.55 ? 'navHome' : 'navGallery');
+}
+
+/* ================= GALLERY ================= */
+function renderGallery(){
+  const grid=document.getElementById('galleryGrid');
+  grid.innerHTML='';
+  for(let i=0;i<6;i++){
+    const div=document.createElement('div');
+    div.className='gallery-item';
+    div.onclick=()=>openLightbox(i);
+    div.innerHTML='<svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8.5C4 7.7 4.7 7 5.5 7H8l1-1.5A1.5 1.5 0 0 1 10.2 5h3.6c.5 0 1 .2 1.2.5L16 7h2.5c.8 0 1.5.7 1.5 1.5v9c0 .8-.7 1.5-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="13" r="3.2"/></svg><span>תמונה — להחלפה</span>';
+    grid.appendChild(div);
+  }
+}
+let lbIndex=0;
+function openLightbox(i){lbIndex=i;document.getElementById('lightbox').classList.add('open');document.getElementById('lbCounter').textContent=(i+1)+' / 6';document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
+function lbNav(dir){lbIndex=(lbIndex+dir+6)%6;document.getElementById('lbCounter').textContent=(lbIndex+1)+' / 6';}
+
+/* ================= SERVICES ================= */
+function renderServices(){
+  const grid=document.getElementById('servicesGrid');
+  grid.innerHTML='';
+  SERVICES.forEach(s=>{
+    const div=document.createElement('div');
+    div.className='card svc-card'+(s.featured?' featured':'');
+    div.innerHTML=`
+      <div>
+        <div class="svc-emoji">${s.emoji}</div>
+        ${s.featured?'<span class="svc-badge">VIP</span>':''}
+        <div class="svc-name">${s.name}</div>
+        <div class="svc-meta">${s.duration}</div>
+        ${s.desc?`<div class="svc-desc">${s.desc}</div>`:''}
+      </div>
+      <div>
+        <div class="svc-price-row"><span class="svc-price">₪${s.price}</span></div>
+        <button class="btn btn-primary btn-sm svc-cta">קבע תור</button>
+      </div>`;
+    div.querySelector('.svc-cta').onclick=()=>tryBook(s.id);
+    grid.appendChild(div);
+  });
+}
+
+/* ================= REGISTRATION ================= */
+let regOtp=null, regPending=null, regThenBook=null;
+function openRegister(thenServiceId, prefill){
+  regThenBook=thenServiceId;
+  document.getElementById('regBody').innerHTML=`
+    <div class="field"><label>שם מלא</label><input id="regName" type="text" placeholder="לדוגמה: יוסי כהן" value="${prefill?prefill.name:''}"></div>
+    <div class="field"><label>טלפון נייד</label><input id="regPhone" type="tel" placeholder="0501234567" value="${prefill?prefill.phone:''}"></div>
+    <p class="error-text hidden" id="regErr"></p>
+    <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="submitRegister()">שלח קוד אימות SMS</button>`;
+  openSheet('regSheet');
+}
+function submitRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const phone=document.getElementById('regPhone').value.trim().replace(/[\s-]/g,'');
+  const err=document.getElementById('regErr');
+  if(!name||!/^0\d{8,9}$/.test(phone)){err.textContent='נא למלא שם ומספר טלפון תקין (לדוגמה 0501234567)';err.classList.remove('hidden');return;}
+  err.classList.add('hidden');
+  regOtp=String(Math.floor(1000+Math.random()*9000));
+  regPending={name,phone};
+  document.getElementById('regBody').innerHTML=`
+    <div class="demo-banner">
+      <b>מצב הדגמה (DEMO)</b>
+      בשלב זה עדיין לא מחובר ספק SMS אמיתי, לכן הקוד מוצג כאן ישירות: <span class="demo-code">${regOtp}</span>
+    </div>
+    <div class="field"><label>הזן קוד בן 4 ספרות</label><input id="regCode" class="otp-input" type="text" inputmode="numeric" maxlength="4"></div>
+    <p class="error-text hidden" id="regErr2"></p>
+    <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="verifyRegister()">אמת והירשם</button>`;
+}
+function verifyRegister(){
+  const code=document.getElementById('regCode').value.trim();
+  const err=document.getElementById('regErr2');
+  if(code!==regOtp){err.textContent='קוד שגוי';err.classList.remove('hidden');return;}
+  const wasEditing=!!state.currentUser;
+  state.currentUser={name:regPending.name, phone:regPending.phone, verifiedAt:Date.now()};
+  upsertClient(state.currentUser);
+  persist(); renderHeader();
+  closeSheet('regSheet');
+  showToast(wasEditing? 'הפרטים עודכנו בהצלחה' : 'נרשמת בהצלחה! ברוך הבא, '+state.currentUser.name);
+  if(document.getElementById('settingsScreen').classList.contains('open')) renderSettings();
+  const svcId=regThenBook; regThenBook=null;
+  if(svcId!==null) setTimeout(()=>openWizard(svcId),250);
+}
+function upsertClient(u){
+  const existing=state.clients.find(c=>c.phone===u.phone);
+  if(existing){existing.name=u.name;}
+  else state.clients.push({id:uid(), name:u.name, phone:u.phone, createdAt:todayIso()});
+}
+
+/* ================= BOOKING WIZARD (sliding track, 4 panels) ================= */
+function tryBook(serviceId){
+  if(!state.currentUser){openRegister(serviceId??null);return;}
+  openWizard(serviceId??null);
+}
+const wiz={step:0, serviceId:null, calYear:0, calMonth:0, date:null, time:null, paymentMethod:'cash'};
+function openWizard(preId){
+  const now=new Date();
+  wiz.step = preId? 1 : 0;
+  wiz.serviceId = preId || SERVICES[0].id;
+  wiz.calYear=now.getFullYear(); wiz.calMonth=now.getMonth();
+  wiz.date=null; wiz.time=null; wiz.paymentMethod='cash';
+  renderWiz();
+  openSheet('wizSheet');
+}
+function renderWiz(){
+  document.getElementById('wizTrack').style.transform=`translateX(-${wiz.step*25}%)`;
+  document.getElementById('wizBackBtn').style.visibility = wiz.step>0?'visible':'hidden';
+  const dots=document.getElementById('wizDots'); dots.innerHTML='';
+  for(let i=0;i<4;i++){const d=document.createElement('span');d.className='sheet-dot'+(i===wiz.step?' active':'');dots.appendChild(d);}
+  renderWizPanel0(); renderWizPanel1(); renderWizPanel2(); renderWizPanel3();
+  renderWizFooter();
+}
+function renderWizPanel0(){
+  const el=document.getElementById('wizPanel0');
+  el.innerHTML='<h3 style="font-weight:800;font-size:1.2rem;margin-bottom:16px">בחר שירות</h3><div id="wizSvcList"></div>';
+  const list=el.querySelector('#wizSvcList');
+  SERVICES.forEach(s=>{
+    const card=document.createElement('div');
+    card.className='card wiz-svc'+(wiz.serviceId===s.id?' sel':'');
+    card.innerHTML=`<div style="font-size:1.6rem">${s.emoji}</div><div style="flex:1"><div class="n">${s.name}</div><div class="d">${s.duration}</div></div><div class="p">₪${s.price}</div>`;
+    card.onclick=()=>{wiz.serviceId=s.id;renderWiz();};
+    list.appendChild(card);
+  });
+}
+function renderWizPanel1(){
+  const el=document.getElementById('wizPanel1');
+  const y=wiz.calYear,m=wiz.calMonth;
+  const firstDow=new Date(y,m,1).getDay();
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const today=new Date(); today.setHours(0,0,0,0);
+  const todayIsoStr=todayIso();
+  let cells='';
+  for(let i=0;i<firstDow;i++) cells+='<div></div>';
+  for(let d=1; d<=daysInMonth; d++){
+    const iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const cellDate=new Date(y,m,d);
+    const past=cellDate<today;
+    const sel=wiz.date===iso;
+    const isToday=iso===todayIsoStr;
+    cells+=`<button class="cal-day${sel?' sel':''}${isToday?' today':''}" ${past?'disabled':''} onclick="wizPickDate('${iso}')">${d}</button>`;
+  }
+  el.innerHTML=`
+    <h3 style="font-weight:800;font-size:1.2rem;margin-bottom:16px">בחר תאריך</h3>
+    <div class="cal-nav">
+      <button class="icon-btn" onclick="wizCalNav(-1)">‹</button>
+      <b>${MONTH_NAMES[m]} ${y}</b>
+      <button class="icon-btn" onclick="wizCalNav(1)">›</button>
+    </div>
+    <div class="cal-grid">${DAY_NAMES.map(d=>'<div class="cal-dname">'+d+'</div>').join('')}${cells}</div>`;
+}
+function renderWizPanel2(){
+  const el=document.getElementById('wizPanel2');
+  const groups=[
+    {label:'בוקר', slots:TIME_SLOTS.filter(t=>+t.slice(0,2)<12)},
+    {label:'צהריים', slots:TIME_SLOTS.filter(t=>{const h=+t.slice(0,2);return h>=12&&h<16;})},
+    {label:'ערב', slots:TIME_SLOTS.filter(t=>+t.slice(0,2)>=16)},
+  ];
+  el.innerHTML=`<h3 style="font-weight:800;font-size:1.2rem;margin-bottom:4px">בחר שעה</h3><p style="color:var(--muted);font-size:.85rem;margin-bottom:16px">${wiz.date||''}</p>`+
+    groups.map(g=>`<div class="tg-label">${g.label}</div><div class="time-grid">${g.slots.map(t=>`<button class="t-slot${wiz.time===t?' sel':''}" onclick="wizPickTime('${t}')">${t}</button>`).join('')}</div>`).join('');
+}
+function renderWizPanel3(){
+  const el=document.getElementById('wizPanel3');
+  const svc=SERVICES.find(s=>s.id===wiz.serviceId);
+  if(!state.currentUser){el.innerHTML='';return;}
+  el.innerHTML=`
+    <h3 style="font-weight:800;font-size:1.2rem;margin-bottom:16px">פרטים ואישור</h3>
+    <div class="card" style="padding:16px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:var(--muted)">שירות</span><b>${svc.emoji} ${svc.name} — ₪${svc.price}</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:var(--muted)">תאריך</span><b>${wiz.date||''}</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:var(--muted)">שעה</span><b>${wiz.time||''}</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:var(--muted)">שם</span><b>${state.currentUser.name}</b></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:var(--muted)">טלפון</span><b>${state.currentUser.phone}</b></div>
+    </div>
+    <div class="field"><label>אמצעי תשלום</label>
+      <div class="radio-row">
+        <label><input type="radio" name="pay" ${wiz.paymentMethod==='cash'?'checked':''} onchange="wiz.paymentMethod='cash'"> מזומן</label>
+        <label><input type="radio" name="pay" ${wiz.paymentMethod==='card'?'checked':''} onchange="wiz.paymentMethod='card'"> כרטיס אשראי</label>
+      </div>
+    </div>`;
+}
+function renderWizFooter(){
+  const footer=document.getElementById('wizFooter');
+  if(wiz.step===0) footer.innerHTML='<button class="btn btn-primary btn-full" onclick="wizNext()">המשך</button>';
+  else if(wiz.step===1) footer.innerHTML=`<button class="btn btn-primary btn-full" ${wiz.date?'':'disabled'} onclick="wizNext()">המשך</button>`;
+  else if(wiz.step===2) footer.innerHTML=`<button class="btn btn-primary btn-full" ${wiz.time?'':'disabled'} onclick="wizNext()">המשך</button>`;
+  else footer.innerHTML='<button class="btn btn-primary btn-full" onclick="submitWizard()">קבע תור</button>';
+}
+function wizCalNav(dir){
+  wiz.calMonth+=dir;
+  if(wiz.calMonth<0){wiz.calMonth=11;wiz.calYear--;}
+  if(wiz.calMonth>11){wiz.calMonth=0;wiz.calYear++;}
+  renderWizPanel1();
+}
+function wizPickDate(iso){wiz.date=iso;renderWiz();}
+function wizPickTime(t){wiz.time=t;renderWiz();}
+function wizNext(){if(wiz.step<3){wiz.step++;renderWiz();}}
+function wizBack(){if(wiz.step>0){wiz.step--;renderWiz();}}
+function submitWizard(){
+  const svc=SERVICES.find(s=>s.id===wiz.serviceId);
+  state.bookings.push({
+    id:uid(), clientName:state.currentUser.name, clientPhone:state.currentUser.phone,
+    service:svc.emoji+' '+svc.name, date:wiz.date, time:wiz.time, paymentMethod:wiz.paymentMethod, status:'pending',
+    createdAt:new Date().toISOString(),
+  });
+  persist();
+  closeSheet('wizSheet');
+  renderHeader();
+  showToast('התור נקבע בהצלחה! (הדמיה — לא בוצע חיוב אמיתי)');
+}
+
+/* ================= SHEETS ================= */
+function openSheet(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeSheet(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+
+/* ================= ADMIN ================= */
+function openAdmin(){document.getElementById('adminScreen').classList.add('open');document.body.style.overflow='hidden';renderAdmin();}
+function closeAdmin(){document.getElementById('adminScreen').classList.remove('open');document.body.style.overflow='';}
+function doAdminLogin(){
+  const pwd=document.getElementById('adminPwd').value;
+  if(pwd===ADMIN_PASSWORD){adminAuthed=true;renderAdmin();}
+  else document.getElementById('adminErr').classList.remove('hidden');
+}
+function adminLogout(){adminAuthed=false;renderAdmin();}
+let adminTab='bookings';
+function setAdminTab(t){adminTab=t;renderAdmin();}
+function renderAdmin(){
+  document.getElementById('adminLogin').classList.toggle('hidden', adminAuthed);
+  document.getElementById('adminDash').classList.toggle('hidden', !adminAuthed);
+  if(!adminAuthed) return;
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===adminTab));
+  document.getElementById('adminTabBookings').classList.toggle('hidden', adminTab!=='bookings');
+  document.getElementById('adminTabClients').classList.toggle('hidden', adminTab!=='clients');
+
+  const today=todayIso();
+  const cols=[
+    {key:'pending', label:'ממתין'},
+    {key:'confirmed', label:'בטיפול'},
+    {key:'completed', label:'הושלם'},
+  ];
+  const bookingsHtml = `
+    <h3 style="font-weight:800;margin-bottom:10px">תורים (${state.bookings.length})</h3>
+    <div class="monitor-grid">
+      ${cols.map(col=>{
+        const items=state.bookings.filter(b=>b.status===col.key).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+        return `<div>
+          <div class="mon-col-head"><b>${col.label}</b><span class="mon-count">${items.length}</span></div>
+          ${items.length===0?'<p style="color:#555;font-size:.8rem">—</p>':items.map(b=>`
+            <div class="card mon-card ${col.key}${b.date===today?' is-today':''}">
+              <div class="mon-time">${b.time}</div>
+              <div class="mon-name">${b.clientName}</div>
+              <div class="mon-svc">${b.service} · ${b.date}</div>
+              ${col.key==='pending'?`<button class="btn btn-primary btn-sm btn-full" style="margin-top:8px" onclick="advanceBooking('${b.id}')">התחל</button>`:''}
+              ${col.key==='confirmed'?`<button class="btn btn-primary btn-sm btn-full" style="margin-top:8px" onclick="completeBooking('${b.id}')">הושלם</button>`:''}
+            </div>`).join('')}
+        </div>`;
+      }).join('')}
+    </div>`;
+  document.getElementById('adminTabBookings').innerHTML = bookingsHtml;
+
+  document.getElementById('adminTabClients').innerHTML = `
+    <h3 style="font-weight:800;margin-bottom:10px">לקוחות (${state.clients.length})</h3>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>שם</th><th>טלפון</th><th>נרשם בתאריך</th></tr></thead>
+        <tbody>${state.clients.map(c=>`<tr><td>${c.name}</td><td>${c.phone}</td><td>${c.createdAt}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+function advanceBooking(id){const b=state.bookings.find(x=>x.id===id); if(b){b.status='confirmed';persist();renderAdmin();}}
+function completeBooking(id){const b=state.bookings.find(x=>x.id===id); if(b){b.status='completed';persist();renderAdmin();}}
+
+/* ================= INIT ================= */
+document.getElementById('year').textContent = new Date().getFullYear();
+renderHeader();
+renderGallery();
+renderServices();
+window.addEventListener('scroll', ()=>{ requestAnimationFrame(updateActiveNavByScroll); }, {passive:true});
+updateActiveNavByScroll();
+</script>
+</body>
+</html>

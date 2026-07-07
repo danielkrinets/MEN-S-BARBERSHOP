@@ -363,7 +363,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 <header>
   <div class="header-row">
     <a href="#top" class="logo">
-      <img class="logo-mark" src="photos/logo.jpg" alt="Barber Shop Natan-El">
+      <img class="logo-mark" src="logo.jpg" alt="Barber Shop Natan-El">
       <span class="logo-text"><b>MEN'S</b><span>BARBERSHOP</span></span>
     </a>
     <nav class="desktop-nav">
@@ -386,13 +386,13 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 
 <section class="hero" id="top">
   <div class="hero-bg">
-    <img src="photos/hero-bg.jpg" alt="">
+    <img src="hero-bg.jpg" alt="">
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-inner">
     <div class="hero-logo-wrap">
       <div class="hero-logo" onclick="handleLogoTap()">
-        <img src="photos/logo.jpg" alt="Barber Shop Natan-El">
+        <img src="logo.jpg" alt="Barber Shop Natan-El">
       </div>
       <span class="hero-logo-badge">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="9" height="10" rx="1.5"/><path d="M12 9h3l3-2v10l-3-2h-3"/><path d="M6 7V5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v2"/></svg>
@@ -1170,7 +1170,7 @@ function renderGallery(){
     const div=document.createElement('div');
     div.className='gallery-item';
     div.onclick=()=>openLightbox(i);
-    div.innerHTML=`<img src="photos/gallery/${i+1}.jpg" alt="תספורת ${i+1}">`;
+    div.innerHTML=`<img src="${i+1}.jpg" alt="תספורת ${i+1}">`;
     grid.appendChild(div);
   }
 }
@@ -1178,7 +1178,7 @@ let lbIndex=0;
 function updateLbCounter(i){lbIndex=i;document.getElementById('lbCounter').textContent=(i+1)+' / '+GALLERY_COUNT;}
 function openLightbox(i){
   const track=document.getElementById('lbTrack');
-  track.innerHTML=Array.from({length:GALLERY_COUNT},(_,idx)=>`<div class="lb-slide"><img src="photos/gallery/${idx+1}.jpg" alt="תספורת ${idx+1}"></div>`).join('');
+  track.innerHTML=Array.from({length:GALLERY_COUNT},(_,idx)=>`<div class="lb-slide"><img src="${idx+1}.jpg" alt="תספורת ${idx+1}"></div>`).join('');
   document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow='hidden';
   updateLbCounter(i);

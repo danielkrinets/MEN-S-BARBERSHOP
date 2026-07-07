@@ -138,6 +138,7 @@ nav.desktop-nav a:hover{color:var(--accent)}
 .svc-name{font-size:1.15rem;font-weight:800}
 .svc-meta{font-size:.85rem;color:var(--muted);margin-top:2px}
 .svc-desc{font-size:.85rem;color:#ccc;margin-top:10px;max-width:420px}
+.svc-more-btn{background:none;border:none;color:var(--accent);font-weight:700;font-size:.82rem;padding:0;margin-top:10px;cursor:pointer;font-family:inherit}
 .svc-price-row{display:flex;align-items:center;gap:8px}
 .svc-price{font-size:1.5rem;font-weight:800}
 .svc-cta{margin-top:8px}
@@ -168,12 +169,12 @@ footer{padding:44px 20px}
 .footer-tg-link:active{transform:scale(.94)}
 
 /* ---------- bottom nav (mobile, glass) ---------- */
-.bottom-nav{position:fixed;inset-inline:0;bottom:0;z-index:40;display:flex;justify-content:space-around;align-items:stretch;overflow:hidden;
+.bottom-nav{position:fixed;inset-inline:0;bottom:0;z-index:200;display:flex;justify-content:space-around;align-items:stretch;overflow:hidden;
   height:calc(60px + env(safe-area-inset-bottom,0px) + var(--tg-extra-bottom,0px));
   background:rgba(10,10,11,.85);backdrop-filter:blur(32px) saturate(2.2);-webkit-backdrop-filter:blur(32px) saturate(2.2);
   border-top:1.5px solid rgba(255,255,255,.08);box-shadow:0 -2px 28px rgba(0,0,0,.4);padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--tg-extra-bottom,0px))}
 @media(min-width:768px){.bottom-nav{display:none}}
-.dock-highlight{position:absolute;top:4px;height:52px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+.dock-highlight{position:absolute;top:4px;height:52px;border-radius:0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
   backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 14px rgba(0,0,0,.3),0 0 0 1px rgba(200,16,46,.14);
   transition:left .35s cubic-bezier(.34,1.56,.64,1),width .35s cubic-bezier(.34,1.56,.64,1);opacity:0;pointer-events:none}
@@ -181,17 +182,15 @@ footer{padding:44px 20px}
   transition:color .2s,transform 55ms cubic-bezier(.4,0,.6,1),opacity 60ms}
 .bottom-nav .icon{width:20px;height:20px}
 .bottom-nav a:active,.bottom-nav button:active{transform:scale(.8);opacity:.68}
-.nav-icn-wrap{display:flex;align-items:center;justify-content:center;width:34px;height:24px;border-radius:8px;margin-bottom:2px}
-.owner-tabs .active-tab .nav-icn-wrap{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.26);
-  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-  box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 2px 14px rgba(0,0,0,.35),0 0 0 1px rgba(200,16,46,.18)}
+.nav-icn-wrap{display:flex;align-items:center;justify-content:center;width:34px;height:24px;border-radius:0;margin-bottom:2px}
 .nav-icn{transition:transform .2s cubic-bezier(.34,1.56,.64,1),opacity .2s;opacity:.7}
 .active-tab{color:var(--accent)}
 .active-tab .nav-icn{opacity:1;transform:scale(1.1)}
 
 /* ---------- owner panel top dock (same liquid-glass language as bottom nav) ---------- */
 .owner-tabs{display:flex;position:sticky;top:65px;z-index:1;background:rgba(10,10,11,.9);backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);border-bottom:1px solid var(--border)}
-.owner-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 2px 12px;color:var(--muted);font-size:.68rem;font-weight:700}
+.owner-tab{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 2px 12px;color:var(--muted);font-size:.68rem;font-weight:700}
+.owner-tabs .dock-highlight{top:6px;height:calc(100% - 12px)}
 .nav-dot{position:absolute;top:4px;right:22%;width:8px;height:8px;background:var(--accent);border-radius:50%;border:2px solid #0a0a0b;display:none;animation:dotPulse 2s ease-in-out infinite}
 .nav-dot.on{display:block}
 
@@ -203,6 +202,7 @@ footer{padding:44px 20px}
 .sheet-backdrop{position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity 320ms ease;display:flex;align-items:flex-end;justify-content:center}
 .sheet-backdrop.open{opacity:1;pointer-events:auto}
 .sheet-panel{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;width:100%;max-width:520px;max-height:78vh;display:flex;flex-direction:column;overflow:hidden;
+  margin-bottom:calc(60px + env(safe-area-inset-bottom,0px) + var(--tg-extra-bottom,0px));
   transform:translateY(100%);transition:transform 380ms cubic-bezier(.4,0,.2,1);box-shadow:0 -8px 40px rgba(0,0,0,.55)}
 .sheet-backdrop.open .sheet-panel{transform:translateY(0)}
 .sheet-backdrop.dragging .sheet-panel{transition:none}
@@ -283,7 +283,10 @@ footer{padding:44px 20px}
 .lb-slide img{max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--r-lg);pointer-events:none;user-select:none;-webkit-user-drag:none}
 
 /* full-screen page (settings / my-booking / admin) */
-.page-screen{position:fixed;inset:0;z-index:150;background:var(--bg);display:none;overflow-y:auto}
+.page-screen{position:fixed;inset:0;z-index:150;background:var(--bg);display:none;overflow-y:auto;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px) + var(--tg-extra-bottom,0px))}
+#pinScreen{z-index:250}
+#wizScreen.open{display:flex;flex-direction:column;overflow:hidden}
+#wizScreen .page-head{flex-shrink:0}
 .page-screen.open{display:block}
 .page-head{position:sticky;top:0;display:flex;align-items:center;gap:14px;padding:14px 20px;background:rgba(10,10,11,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);z-index:2}
 .page-head h2{font-weight:800;font-size:1.2rem;flex:1}
@@ -402,16 +405,16 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
       <div class="hero-logo" onclick="handleLogoTap()">
         <img src="logo.jpg" alt="Barber Shop Natan-El">
       </div>
-      <span class="hero-logo-badge">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="9" height="10" rx="1.5"/><path d="M12 9h3l3-2v10l-3-2h-3"/><path d="M6 7V5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v2"/></svg>
-      </span>
     </div>
     <span class="section-label">MEN'S BARBERSHOP</span>
     <h1><span data-i18n="hero_title_l1">תספורת בסטנדרט גבוה,</span><br><span data-i18n="hero_title_l2">לגבר שיודע מה הוא רוצה.</span></h1>
     <p><span data-i18n="hero_lead">קביעת תור אונליין, טיפוח וטיפולי VIP במקום אחד.</span> <span data-i18n="hero_owner_prefix">בעלים:</span> <span data-owner-name>נתנאל דיין</span></p>
     <div class="hero-ctas">
       <button class="btn btn-primary btn-hero" data-i18n="hero_book_now" onclick="tryBook()">קבע תור עכשיו</button>
-      <a class="btn btn-outline" data-i18n="hero_follow_tiktok" data-tiktok-href href="https://www.tiktok.com/@.mans_barber" target="_blank" rel="noopener">עקבו בטיקטוק</a>
+      <a class="btn btn-outline" style="display:inline-flex;align-items:center;gap:8px" data-tiktok-href href="https://www.tiktok.com/@.mans_barber" target="_blank" rel="noopener">
+        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3.2v13.7c0 1.4-1.1 2.6-2.6 2.6a2.6 2.6 0 0 1-2.6-2.6c0-1.4 1.1-2.6 2.6-2.6.3 0 .5 0 .8.1V9.9a5.9 5.9 0 0 0-.8 0A5.8 5.8 0 0 0 5 15.7a5.8 5.8 0 0 0 5.8 5.8 5.8 5.8 0 0 0 5.8-5.8V8.6a8 8 0 0 0 4.4 1.3V6.7a4.8 4.8 0 0 1-4.5-4.7Z"/></svg>
+        <span data-i18n="hero_follow_tiktok">עקבו בטיקטוק</span>
+      </a>
     </div>
   </div>
 </section>
@@ -553,24 +556,21 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 </div>
 
 <!-- ===== Booking wizard: draggable bottom sheet, sliding steps ===== -->
-<div class="sheet-backdrop" id="wizSheet" onclick="if(event.target===this)closeSheet('wizSheet')">
-  <div class="sheet-panel">
-    <div class="sheet-handle-wrap" data-drag-handle><div class="sheet-handle"></div></div>
-    <div class="sheet-header" data-drag-handle>
-      <button class="icon-btn" id="wizBackBtn" onclick="wizBack()">‹</button>
-      <div class="sheet-dots" id="wizDots"></div>
-      <button class="icon-btn" onclick="closeSheet('wizSheet')">✕</button>
-    </div>
-    <div class="wiz-track-wrapper">
-      <div class="wiz-track" id="wizTrack">
-        <div class="wiz-panel" dir="rtl" id="wizPanel0"></div>
-        <div class="wiz-panel" dir="rtl" id="wizPanel1"></div>
-        <div class="wiz-panel" dir="rtl" id="wizPanel2"></div>
-        <div class="wiz-panel" dir="rtl" id="wizPanel3"></div>
-      </div>
-    </div>
-    <div class="sheet-footer" id="wizFooter"></div>
+<div id="wizScreen" class="page-screen">
+  <div class="page-head">
+    <button class="icon-btn" id="wizBackBtn" onclick="wizBack()">‹</button>
+    <div class="sheet-dots" id="wizDots" style="flex:1;justify-content:center"></div>
+    <button class="icon-btn" onclick="closeWizard()">✕</button>
   </div>
+  <div class="wiz-track-wrapper">
+    <div class="wiz-track" id="wizTrack">
+      <div class="wiz-panel" dir="rtl" id="wizPanel0"></div>
+      <div class="wiz-panel" dir="rtl" id="wizPanel1"></div>
+      <div class="wiz-panel" dir="rtl" id="wizPanel2"></div>
+      <div class="wiz-panel" dir="rtl" id="wizPanel3"></div>
+    </div>
+  </div>
+  <div class="sheet-footer" id="wizFooter"></div>
 </div>
 
 <!-- ===== Lightbox: swipeable album, drag/swipe between photos ===== -->
@@ -666,6 +666,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
     <h2>פאנל בעלים</h2>
   </div>
   <div class="owner-tabs" id="ownerTabs">
+    <div class="dock-highlight" id="ownerTabsHighlight"></div>
     <button class="owner-tab active-tab" data-tab="site" onclick="setOwnerTab('site')">
       <span class="nav-icn-wrap"><svg class="icon nav-icn" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
       כללי
@@ -711,14 +712,23 @@ document.addEventListener('contextmenu', e=>{ if(e.target.tagName==='IMG') e.pre
 document.addEventListener('dragstart', e=>{ if(e.target.tagName==='IMG') e.preventDefault(); });
 
 const SERVICES = [
-  {id:'haircut', emoji:'✂️', name:'תספורת גברים', duration:'45 דקות', price:80},
-  {id:'haircut-beard', emoji:'🪒', name:'תספורת + עיצוב זקן', duration:'60 דקות', price:110},
-  {id:'vip-pamper-day', emoji:'✨', name:'יום פינוק VIP', duration:'שעתיים שלמות', price:300, featured:true,
-    desc:'טיפול פנים במגבות חמות, מסכת פנים, משחה שחורה ותספורת מלאה, מושלם למי שיש לו אירוע ורוצה לפנק את עצמו.'},
+  {id:'haircut', emoji:'✂️', name:'תספורת גברים', duration:'45 דקות', price:80, desc:''},
+  {id:'haircut-beard', emoji:'🪒', name:'תספורת + עיצוב זקן', duration:'60 דקות', price:110, desc:''},
+  {id:'vip-pamper-day', emoji:'✨', name:'יום פינוק VIP', duration:'שעתיים שלמות', price:300, featured:true, desc:''},
 ];
-const TIME_SLOTS = (()=>{
-  const out=[]; for(let i=0;i<21;i++){const t=9*60+i*30;const h=String(Math.floor(t/60)).padStart(2,'0');const m=String(t%60).padStart(2,'0');out.push(h+':'+m);} return out;
-})();
+function timeSlotsForDate(iso){
+  if(!iso) return [];
+  const dow=new Date(iso+'T00:00:00').getDay();
+  const h=state.workingHours[dow];
+  if(!h || h.closed) return [];
+  const [oh,om]=h.open.split(':').map(Number);
+  const [ch,cm]=h.close.split(':').map(Number);
+  const out=[];
+  for(let t=oh*60+om; t<ch*60+cm; t+=30){
+    out.push(String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0'));
+  }
+  return out;
+}
 const MONTH_NAMES_I18N={
   he:['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'],
   en:['January','February','March','April','May','June','July','August','September','October','November','December'],
@@ -752,6 +762,7 @@ const I18N={
     badge_haircut:'תספורת מקצועית', badge_grooming:'טיפוח VIP', badge_booking:'קביעת תור אונליין', badge_fast:'זמינות מהירה',
     trust_title:'ניקיון וסטריליות בראש סדר העדיפויות', trust_sub:'כלים מחוטאים לכל תספורת · מוצרי טיפוח מקצועיים בלבד',
     services_label:'תפריט', services_title:'שירותים ומחירון', svc_book_btn:'קבע תור', svc_vip_badge:'VIP',
+    svc_more_info:'פרטים נוספים', svc_less_info:'הסתר פרטים', svc_more_soon:'פרטים נוספים יתווספו בקרוב.',
     gallery_label:'עבודות', gallery_title:'גלריית תספורות', gallery_lead:'כמה מהתספורות האחרונות שיצאו מהמספרה.',
     location_label:'מיקום', location_title:'איפה נמצאים', location_map_placeholder:'מפה (תתווסף לאחר קבלת הכתובת)',
     location_addr_title:'כתובת המספרה', location_addr_fallback:'להשלמה על ידי בעל העסק',
@@ -795,6 +806,7 @@ const I18N={
     badge_haircut:'Professional Haircuts', badge_grooming:'VIP Grooming', badge_booking:'Online Booking', badge_fast:'Fast Availability',
     trust_title:'Cleanliness and hygiene, always the top priority', trust_sub:'Sterilized tools for every cut · Professional grooming products only',
     services_label:'Menu', services_title:'Services & Pricing', svc_book_btn:'Book', svc_vip_badge:'VIP',
+    svc_more_info:'More info', svc_less_info:'Hide info', svc_more_soon:'More details coming soon.',
     gallery_label:'Our Work', gallery_title:'Haircut Gallery', gallery_lead:'Some of the latest cuts from the shop.',
     location_label:'Location', location_title:'Find Us', location_map_placeholder:'Map (coming once the address is set)',
     location_addr_title:'Shop Address', location_addr_fallback:'To be filled in by the owner',
@@ -838,6 +850,7 @@ const I18N={
     badge_haircut:'Профессиональные стрижки', badge_grooming:'VIP уход', badge_booking:'Онлайн-запись', badge_fast:'Быстрая запись',
     trust_title:'Чистота и стерильность — наш приоритет', trust_sub:'Стерильные инструменты для каждой стрижки · Только профессиональная косметика',
     services_label:'Меню', services_title:'Услуги и цены', svc_book_btn:'Записаться', svc_vip_badge:'VIP',
+    svc_more_info:'Подробнее', svc_less_info:'Скрыть', svc_more_soon:'Подробности скоро появятся.',
     gallery_label:'Работы', gallery_title:'Галерея стрижек', gallery_lead:'Несколько последних работ из барбершопа.',
     location_label:'Адрес', location_title:'Где мы находимся', location_map_placeholder:'Карта (появится после указания адреса)',
     location_addr_title:'Адрес барбершопа', location_addr_fallback:'Будет заполнено владельцем',
@@ -896,7 +909,7 @@ function setLanguage(lang){
   renderServices();
   if(document.getElementById('settingsScreen').classList.contains('open')) renderSettings();
   if(document.getElementById('myBookingScreen').classList.contains('open')) renderMyBooking();
-  if(document.getElementById('wizSheet').classList.contains('open')) renderWiz();
+  if(document.getElementById('wizScreen').classList.contains('open')) renderWiz();
 }
 
 const API_BASE='https://website-six-vert-48.vercel.app';
@@ -925,7 +938,17 @@ const DEFAULT_SETTINGS={
   tiktokHandle:'@.mans_barber',
   address:'',
 };
-const DEFAULTS={currentUser:null, clients:[], bookings:[], settings:{...DEFAULT_SETTINGS}, serviceOverrides:{}};
+const OWNER_DOW_LABELS=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+const DEFAULT_WORKING_HOURS={
+  0:{open:'09:00',close:'19:30',closed:false},
+  1:{open:'09:00',close:'19:30',closed:false},
+  2:{open:'09:00',close:'19:30',closed:false},
+  3:{open:'09:00',close:'19:30',closed:false},
+  4:{open:'09:00',close:'19:30',closed:false},
+  5:{open:'09:00',close:'19:30',closed:false},
+  6:{open:'09:00',close:'19:30',closed:true},
+};
+const DEFAULTS={currentUser:null, clients:[], bookings:[], settings:{...DEFAULT_SETTINGS}, serviceOverrides:{}, workingHours:{...DEFAULT_WORKING_HOURS}};
 function loadState(){
   try{
     const raw=localStorage.getItem(STORAGE_KEY);
@@ -936,6 +959,7 @@ function loadState(){
       ...parsed,
       settings:{...DEFAULT_SETTINGS, ...(parsed.settings||{})},
       serviceOverrides:{...(parsed.serviceOverrides||{})},
+      workingHours:{...DEFAULT_WORKING_HOURS, ...(parsed.workingHours||{})},
     };
   }catch{return structuredClone(DEFAULTS);}
 }
@@ -1025,9 +1049,6 @@ function closeSettings(){
   document.body.style.overflow='';
   updateActiveNavByScroll();
 }
-function editProfile(){
-  openRegister(null, {name:state.currentUser.name, phone:state.currentUser.phone});
-}
 const LANGUAGES=[{key:'he',label:'עברית'},{key:'en',label:'English'},{key:'ru',label:'Русский'}];
 function renderSettings(){
   const body=document.getElementById('settingsBody');
@@ -1044,7 +1065,6 @@ function renderSettings(){
       ${u?`
         <div class="s-row" style="border:none">
           <div><div class="s-label">${u.name}</div><div class="s-sub">${u.phone}</div></div>
-          <button class="btn btn-outline btn-sm" onclick="editProfile()">${tr('settings_edit')}</button>
         </div>
         <div class="s-row" style="border:none;padding-top:0">
           <button class="btn btn-outline btn-sm btn-full" onclick="logoutUser();renderSettings();">${tr('settings_logout')}</button>
@@ -1200,9 +1220,8 @@ function setActiveNav(id){
   if(el) el.classList.add('active-tab');
   updateDockHighlight();
 }
-function updateDockHighlight(){
-  const nav=document.querySelector('.bottom-nav');
-  const highlight=document.getElementById('dockHighlight');
+function positionTabHighlight(nav, highlight){
+  if(!nav||!highlight) return;
   const active=nav.querySelector('.active-tab');
   if(!active){ highlight.style.opacity='0'; return; }
   const navRect=nav.getBoundingClientRect();
@@ -1212,10 +1231,17 @@ function updateDockHighlight(){
   highlight.style.left=(activeRect.left-navRect.left+inset)+'px';
   highlight.style.width=(activeRect.width-inset*2)+'px';
 }
+function updateDockHighlight(){
+  positionTabHighlight(document.querySelector('.bottom-nav'), document.getElementById('dockHighlight'));
+}
+function updateOwnerTabsHighlight(){
+  positionTabHighlight(document.getElementById('ownerTabs'), document.getElementById('ownerTabsHighlight'));
+}
 function updateActiveNavByScroll(){
   if(document.getElementById('settingsScreen').classList.contains('open')) return;
   if(document.getElementById('myBookingScreen').classList.contains('open')) return;
   if(document.getElementById('adminScreen').classList.contains('open')) return;
+  if(document.getElementById('wizScreen').classList.contains('open')) return;
   const galleryTop=document.getElementById('gallery').getBoundingClientRect().top;
   setActiveNav(galleryTop > window.innerHeight*0.55 ? 'navHome' : 'navGallery');
 }
@@ -1279,13 +1305,20 @@ function renderServices(){
         ${s.featured?`<span class="svc-badge">${tr('svc_vip_badge')}</span>`:''}
         <div class="svc-name">${s.name}</div>
         <div class="svc-meta">${s.duration}</div>
-        ${s.desc?`<div class="svc-desc">${s.desc}</div>`:''}
+        <button class="svc-more-btn" type="button">${tr('svc_more_info')}</button>
+        <div class="svc-desc hidden">${s.desc?s.desc:tr('svc_more_soon')}</div>
       </div>
       <div>
         <div class="svc-price-row"><span class="svc-price">₪${s.price}</span></div>
         <button class="btn btn-primary btn-sm svc-cta">${tr('svc_book_btn')}</button>
       </div>`;
     div.querySelector('.svc-cta').onclick=()=>tryBook(s.id);
+    div.querySelector('.svc-more-btn').onclick=(e)=>{
+      const descEl=div.querySelector('.svc-desc');
+      const isHidden=descEl.classList.contains('hidden');
+      descEl.classList.toggle('hidden');
+      e.currentTarget.textContent = isHidden ? tr('svc_less_info') : tr('svc_more_info');
+    };
     grid.appendChild(div);
   });
 }
@@ -1470,7 +1503,13 @@ function openWizard(preId){
   wiz.calYear=now.getFullYear(); wiz.calMonth=now.getMonth();
   wiz.date=null; wiz.time=null; wiz.paymentMethod='cash';
   renderWiz();
-  openSheet('wizSheet');
+  document.getElementById('wizScreen').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeWizard(){
+  document.getElementById('wizScreen').classList.remove('open');
+  document.body.style.overflow='';
+  updateActiveNavByScroll();
 }
 function renderWiz(){
   document.getElementById('wizTrack').style.transform=`translateX(-${wiz.step*25}%)`;
@@ -1505,9 +1544,11 @@ function renderWizPanel1(){
     const iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     const cellDate=new Date(y,m,d);
     const past=cellDate<today;
+    const dayClosed=(state.workingHours[cellDate.getDay()]||{}).closed;
+    const disabled=past||dayClosed;
     const sel=wiz.date===iso;
     const isToday=iso===todayIsoStr;
-    cells+=`<button class="cal-day${sel?' sel':''}${isToday?' today':''}" ${past?'disabled':''} onclick="wizPickDate('${iso}')">${d}</button>`;
+    cells+=`<button class="cal-day${sel?' sel':''}${isToday?' today':''}" ${disabled?'disabled':''} onclick="wizPickDate('${iso}')">${d}</button>`;
   }
   el.innerHTML=`
     <h3 style="font-weight:800;font-size:1.2rem;margin-bottom:16px">${tr('wiz_step_date')}</h3>
@@ -1520,10 +1561,11 @@ function renderWizPanel1(){
 }
 function renderWizPanel2(){
   const el=document.getElementById('wizPanel2');
+  const daySlots=timeSlotsForDate(wiz.date);
   const groups=[
-    {label:tr('time_morning'), slots:TIME_SLOTS.filter(t=>+t.slice(0,2)<12)},
-    {label:tr('time_afternoon'), slots:TIME_SLOTS.filter(t=>{const h=+t.slice(0,2);return h>=12&&h<16;})},
-    {label:tr('time_evening'), slots:TIME_SLOTS.filter(t=>+t.slice(0,2)>=16)},
+    {label:tr('time_morning'), slots:daySlots.filter(t=>+t.slice(0,2)<12)},
+    {label:tr('time_afternoon'), slots:daySlots.filter(t=>{const h=+t.slice(0,2);return h>=12&&h<16;})},
+    {label:tr('time_evening'), slots:daySlots.filter(t=>+t.slice(0,2)>=16)},
   ];
   el.innerHTML=`<h3 style="font-weight:800;font-size:1.2rem;margin-bottom:4px">${tr('wiz_step_time')}</h3><p style="color:var(--muted);font-size:.85rem;margin-bottom:16px">${wiz.date||''}</p>`+
     groups.map(g=>`<div class="tg-label">${g.label}</div><div class="time-grid">${g.slots.map(t=>`<button class="t-slot${wiz.time===t?' sel':''}" onclick="wizPickTime('${t}')">${t}</button>`).join('')}</div>`).join('');
@@ -1584,7 +1626,7 @@ async function submitWizard(){
       createdAt:new Date().toISOString(),
     });
     persist();
-    closeSheet('wizSheet');
+    closeWizard();
     renderHeader();
     showToast(tr('wiz_success_toast'));
   }catch(e){
@@ -1634,7 +1676,6 @@ function initDraggableSheet(overlayId){
   window.addEventListener('mouseup', end);
 }
 initDraggableSheet('regSheet');
-initDraggableSheet('wizSheet');
 
 function openAdmin(){document.getElementById('adminScreen').classList.add('open');document.body.style.overflow='hidden';renderAdmin();}
 function closeAdmin(){document.getElementById('adminScreen').classList.remove('open');document.body.style.overflow='';}
@@ -1751,6 +1792,7 @@ function openOwnerPanel(){
   renderOwnerTabContent();
   document.getElementById('ownerPanelScreen').classList.add('open');
   document.body.style.overflow='hidden';
+  updateOwnerTabsHighlight();
 }
 function closeOwnerPanel(){
   document.getElementById('ownerPanelScreen').classList.remove('open');
@@ -1760,6 +1802,7 @@ function setOwnerTab(tab){
   ownerTab=tab;
   document.querySelectorAll('.owner-tab').forEach(b=>b.classList.toggle('active-tab', b.dataset.tab===tab));
   renderOwnerTabContent();
+  updateOwnerTabsHighlight();
 }
 function renderOwnerTabContent(){
   if(ownerTab==='site') renderOwnerSiteTab();
@@ -1845,11 +1888,27 @@ function renderOwnerSiteTab(){
     ${SERVICES.map(svc=>`
       <div class="card" style="padding:14px;margin-bottom:10px">
         <div class="field" style="margin-bottom:8px"><label>שם השירות</label><input data-svc="${svc.id}" data-field="name" type="text" value="${svc.name}"></div>
-        <div style="display:flex;gap:10px">
+        <div style="display:flex;gap:10px;margin-bottom:8px">
           <div class="field" style="flex:1;margin-bottom:0"><label>משך</label><input data-svc="${svc.id}" data-field="duration" type="text" value="${svc.duration}"></div>
           <div class="field" style="flex:1;margin-bottom:0"><label>מחיר (₪)</label><input data-svc="${svc.id}" data-field="price" type="number" value="${svc.price}"></div>
         </div>
+        <div class="field" style="margin-bottom:0"><label>מה כלול (מוצג בכפתור "פרטים נוספים")</label><textarea data-svc="${svc.id}" data-field="desc" rows="3" placeholder="לדוגמה: כולל מגבת חמה, שטיפת שיער ועיצוב זקן...">${svc.desc||''}</textarea></div>
       </div>`).join('')}
+
+    <p class="s-head" style="margin:24px 0 10px">שעות פעילות</p>
+    ${OWNER_DOW_LABELS.map((label,dow)=>{
+      const h=state.workingHours[dow]||DEFAULT_WORKING_HOURS[dow];
+      return `
+      <div class="card" style="padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:6px;font-weight:700;min-width:70px">
+          <input type="checkbox" id="opHoursClosed${dow}" ${h.closed?'checked':''} onchange="this.closest('.card').querySelectorAll('input[type=time]').forEach(i=>i.disabled=this.checked)" style="width:16px;height:16px">
+          ${label}
+        </label>
+        <input type="time" id="opHoursOpen${dow}" value="${h.open}" ${h.closed?'disabled':''} style="flex:1;min-width:100px;background:#000;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--fg);font-family:inherit">
+        <span style="color:var(--muted)">עד</span>
+        <input type="time" id="opHoursClose${dow}" value="${h.close}" ${h.closed?'disabled':''} style="flex:1;min-width:100px;background:#000;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--fg);font-family:inherit">
+      </div>`;
+    }).join('')}
 
     <p class="s-head" style="margin:24px 0 10px">שינוי קוד גישה (5 הקשות על הלוגו, ומשמש גם לתורים/לקוחות ול-/admin באתר)</p>
     <div class="field"><label>קוד נוכחי</label><input id="opCurPin" type="password" inputmode="numeric" maxlength="4"></div>
@@ -2107,7 +2166,14 @@ async function saveOwnerPanel(){
     svc[field] = field==='price' ? (Number(input.value)||svc.price) : input.value.trim();
   });
   state.serviceOverrides={};
-  SERVICES.forEach(s=>{ state.serviceOverrides[s.id]={name:s.name, duration:s.duration, price:s.price}; });
+  SERVICES.forEach(s=>{ state.serviceOverrides[s.id]={name:s.name, duration:s.duration, price:s.price, desc:s.desc}; });
+
+  for(let dow=0; dow<7; dow++){
+    const closed=document.getElementById('opHoursClosed'+dow).checked;
+    const open=document.getElementById('opHoursOpen'+dow).value;
+    const close=document.getElementById('opHoursClose'+dow).value;
+    state.workingHours[dow]={closed, open, close};
+  }
 
   persist();
   renderSiteSettings();
@@ -2121,6 +2187,7 @@ async function saveOwnerPanel(){
       tiktokHandle: state.settings.tiktokHandle,
       address: state.settings.address,
       serviceOverrides: state.serviceOverrides,
+      workingHours: state.workingHours,
     });
     showToast('ההגדרות נשמרו בהצלחה לכולם');
   }catch(e){
@@ -2140,6 +2207,7 @@ async function loadSiteSettingsFromServer(){
       const o=state.serviceOverrides[s.id];
       if(o) Object.assign(s,o);
     });
+    if(remote.workingHours) state.workingHours={...DEFAULT_WORKING_HOURS, ...remote.workingHours};
     persist();
     renderSiteSettings();
     renderServices();

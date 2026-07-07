@@ -760,6 +760,7 @@ const I18N={
     reg_demo_title:'מצב הדגמה (DEMO)', reg_demo_body:'בשלב זה עדיין לא מחובר ספק SMS אמיתי, לכן הקוד מוצג כאן ישירות:',
     reg_sms_sent:'שלחנו קוד אימות בן 4 ספרות למספר {phone} בהודעת SMS.',
     reg_code_label:'הזן קוד בן 4 ספרות', reg_verify_btn:'אמת והירשם', reg_verifying:'מאמת...', reg_code_err:'קוד שגוי', reg_get_code_telegram:'קבל קוד בטלגרם', reg_check_bot:'לחצו למטה כדי לקבל את הקוד מהבוט בטלגרם',
+    reg_check_bot_msg:'בדקו את ההודעה מהבוט בטלגרם', reg_resend_in:'שליחה חוזרת בעוד {n} שניות', reg_resend_btn:'שלח קוד חדש',
     reg_updated_toast:'הפרטים עודכנו בהצלחה', reg_welcome_toast:'נרשמת בהצלחה! ברוך הבא, {name}',
     settings_title:'הגדרות', settings_account:'חשבון', settings_edit:'עריכה', settings_logout:'התנתקות',
     settings_not_logged_in:'לא מחובר', settings_register:'הרשמה', settings_about:'אודות המספרה',
@@ -801,6 +802,7 @@ const I18N={
     reg_demo_title:'Demo Mode', reg_demo_body:'No real SMS provider is connected yet, so the code is shown here directly:',
     reg_sms_sent:'We sent a 4-digit verification code to {phone} by SMS.',
     reg_code_label:'Enter the 4-digit code', reg_verify_btn:'Verify & Sign Up', reg_verifying:'Verifying...', reg_code_err:'Incorrect code', reg_get_code_telegram:'Get code via Telegram', reg_check_bot:'Tap below to get your code from the Telegram bot',
+    reg_check_bot_msg:'Check the message from the Telegram bot', reg_resend_in:'Resend in {n}s', reg_resend_btn:'Send new code',
     reg_updated_toast:'Details updated successfully', reg_welcome_toast:'Signed up successfully! Welcome, {name}',
     settings_title:'Settings', settings_account:'Account', settings_edit:'Edit', settings_logout:'Log out',
     settings_not_logged_in:'Not signed in', settings_register:'Sign up', settings_about:'About the shop',
@@ -842,6 +844,7 @@ const I18N={
     reg_demo_title:'Демо-режим', reg_demo_body:'Реальный SMS-провайдер пока не подключён, поэтому код показан прямо здесь:',
     reg_sms_sent:'Мы отправили 4-значный код подтверждения на номер {phone} по SMS.',
     reg_code_label:'Введите 4-значный код', reg_verify_btn:'Подтвердить и зарегистрироваться', reg_verifying:'Проверка...', reg_code_err:'Неверный код', reg_get_code_telegram:'Получить код в Telegram', reg_check_bot:'Нажмите ниже, чтобы получить код у бота в Telegram',
+    reg_check_bot_msg:'Проверьте сообщение от бота в Telegram', reg_resend_in:'Повторная отправка через {n} сек', reg_resend_btn:'Отправить новый код',
     reg_updated_toast:'Данные успешно обновлены', reg_welcome_toast:'Регистрация прошла успешно! Добро пожаловать, {name}',
     settings_title:'Настройки', settings_account:'Аккаунт', settings_edit:'Изменить', settings_logout:'Выйти',
     settings_not_logged_in:'Вы не вошли', settings_register:'Регистрация', settings_about:'О барбершопе',
@@ -1288,31 +1291,70 @@ async function submitRegister(){
   try{
     const data=await apiPost('/api/otp/request',{phone});
     regPending={name,phone};
-    document.getElementById('regBody').innerHTML=`
-      ${data.telegramBot
-        ? `<p style="color:var(--muted);font-size:.9rem;margin-bottom:12px">${tr('reg_check_bot')}</p>`
-        : data.demo
-          ? `<div class="demo-banner"><b>${tr('reg_demo_title')}</b>${tr('reg_demo_body')} <span class="demo-code">${data.code}</span></div>`
-          : `<p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">${trf('reg_sms_sent',{phone})}</p>`}
-      ${data.telegramBot?`<a href="https://t.me/${data.telegramBot}?start=${phone}" target="_blank" rel="noopener" class="footer-tg-link" style="margin-bottom:16px">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
-        ${tr('reg_get_code_telegram')}
-      </a>`:''}
-      <div class="field"><label>${tr('reg_code_label')}</label>
-        <div class="otp-cells" id="regCodeCells">
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
-        </div>
-      </div>
-      <p class="error-text hidden" id="regErr2"></p>
-      <button class="btn btn-primary btn-full" id="regVerifyBtn" style="margin-top:8px" onclick="verifyRegister()">${tr('reg_verify_btn')}</button>`;
-    initOtpCells('regCodeCells');
+    renderOtpEntryStep(data, phone);
   }catch(e){
     err.textContent=e.message||tr('reg_send_err');
     err.classList.remove('hidden');
     btn.disabled=false; btn.textContent=tr('reg_submit');
+  }
+}
+function renderOtpEntryStep(data, phone){
+  document.getElementById('regBody').innerHTML=`
+    ${data.telegramBot
+      ? `<p style="color:var(--muted);font-size:.9rem;margin-bottom:12px">${tr('reg_check_bot')}</p>`
+      : data.demo
+        ? `<div class="demo-banner"><b>${tr('reg_demo_title')}</b>${tr('reg_demo_body')} <span class="demo-code">${data.code}</span></div>`
+        : `<p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">${trf('reg_sms_sent',{phone})}</p>`}
+    ${data.telegramBot?`<a href="https://t.me/${data.telegramBot}?start=${phone}" target="_blank" rel="noopener" class="footer-tg-link" id="tgCodeBtn" style="margin-bottom:16px" onclick="onTelegramCodeClick()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
+      <span id="tgCodeBtnLabel">${tr('reg_get_code_telegram')}</span>
+    </a>`:''}
+    <div class="field"><label>${tr('reg_code_label')}</label>
+      <div class="otp-cells" id="regCodeCells">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-cell">
+      </div>
+    </div>
+    <p class="error-text hidden" id="regErr2"></p>
+    <button class="btn btn-primary btn-full" id="regVerifyBtn" style="margin-top:8px;margin-bottom:10px" onclick="verifyRegister()">${tr('reg_verify_btn')}</button>
+    <p id="resendLine" style="color:var(--muted);font-size:.85rem;text-align:center"></p>`;
+  initOtpCells('regCodeCells');
+  startResendCountdown();
+}
+function onTelegramCodeClick(){
+  const btn=document.getElementById('tgCodeBtn');
+  const label=document.getElementById('tgCodeBtnLabel');
+  if(btn){ btn.style.pointerEvents='none'; btn.style.opacity='.5'; }
+  if(label) label.textContent=tr('reg_check_bot_msg');
+}
+let otpResendInterval=null;
+function startResendCountdown(){
+  let secondsLeft=60;
+  clearInterval(otpResendInterval);
+  const line=document.getElementById('resendLine');
+  const render=()=>{ if(line) line.textContent=trf('reg_resend_in',{n:secondsLeft}); };
+  render();
+  otpResendInterval=setInterval(()=>{
+    secondsLeft--;
+    if(secondsLeft<=0){
+      clearInterval(otpResendInterval);
+      if(line) line.innerHTML=`<button class="btn btn-outline btn-sm" onclick="resendRegisterCode()">${tr('reg_resend_btn')}</button>`;
+      return;
+    }
+    render();
+  },1000);
+}
+async function resendRegisterCode(){
+  const line=document.getElementById('resendLine');
+  if(line) line.textContent=tr('reg_sending');
+  try{
+    const data=await apiPost('/api/otp/request',{phone:regPending.phone});
+    renderOtpEntryStep(data, regPending.phone);
+  }catch(e){
+    if(line) line.innerHTML=`<button class="btn btn-outline btn-sm" onclick="resendRegisterCode()">${tr('reg_resend_btn')}</button>`;
+    showToast(e.message||tr('reg_send_err'));
   }
 }
 function initOtpCells(containerId){
@@ -1340,6 +1382,7 @@ async function verifyRegister(){
   try{
     await apiPost('/api/otp/verify',{phone:regPending.phone, code});
     await apiPost('/api/register',{name:regPending.name, phone:regPending.phone});
+    clearInterval(otpResendInterval);
     const wasEditing=!!state.currentUser;
     state.currentUser={name:regPending.name, phone:regPending.phone, verifiedAt:Date.now()};
     upsertClient(state.currentUser);
@@ -1499,7 +1542,7 @@ async function submitWizard(){
 }
 
 function openSheet(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
-function closeSheet(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function closeSheet(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';if(id==='regSheet')clearInterval(otpResendInterval);}
 
 function initDraggableSheet(overlayId){
   const overlay=document.getElementById(overlayId);
@@ -1680,29 +1723,44 @@ function closeOwnerOrdersScreen(){
 }
 
 async function adminApiGet(path){
-  const res = await fetch(API_BASE+path, { headers:{'x-admin-password': state.settings.pin} });
+  let res;
+  try{
+    res = await fetch(API_BASE+path, { headers:{'x-admin-password': state.settings.pin} });
+  }catch{
+    throw new Error(tr('err_no_connection'));
+  }
   const json = await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(json.error || 'שגיאה');
+  if(!res.ok) throw new Error(json.error || tr('err_server'));
   return json;
 }
 async function adminApiPost(path, data){
-  const res = await fetch(API_BASE+path, {
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-admin-password': state.settings.pin},
-    body:JSON.stringify(data),
-  });
+  let res;
+  try{
+    res = await fetch(API_BASE+path, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-admin-password': state.settings.pin},
+      body:JSON.stringify(data),
+    });
+  }catch{
+    throw new Error(tr('err_no_connection'));
+  }
   const json = await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(json.error || 'שגיאה');
+  if(!res.ok) throw new Error(json.error || tr('err_server'));
   return json;
 }
 async function adminApiPatch(path, data){
-  const res = await fetch(API_BASE+path, {
-    method:'PATCH',
-    headers:{'Content-Type':'application/json','x-admin-password': state.settings.pin},
-    body:JSON.stringify(data),
-  });
+  let res;
+  try{
+    res = await fetch(API_BASE+path, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','x-admin-password': state.settings.pin},
+      body:JSON.stringify(data),
+    });
+  }catch{
+    throw new Error(tr('err_no_connection'));
+  }
   const json = await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(json.error || 'שגיאה');
+  if(!res.ok) throw new Error(json.error || tr('err_server'));
   return json;
 }
 

@@ -520,16 +520,16 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 
 <nav class="bottom-nav">
   <div class="dock-highlight" id="dockHighlight"></div>
-  <a href="#top" class="active-tab" id="navHome" onclick="closeAllPageScreens()">
+  <a href="#top" class="active-tab" id="navHome">
     <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-4.5a.5.5 0 0 1-.5-.5V15a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5.5a.5.5 0 0 1-.5.5H4a1 1 0 0 1-1-1Z"/></svg></span>
     <span data-i18n="dock_home">בית</span>
     <span class="nav-dot" id="navDot"></span>
   </a>
-  <a href="#gallery" id="navGallery" onclick="closeAllPageScreens()">
+  <a href="#gallery" id="navGallery">
     <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8.5C4 7.7 4.7 7 5.5 7H8l1-1.5A1.5 1.5 0 0 1 10.2 5h3.6c.5 0 1 .2 1.2.5L16 7h2.5c.8 0 1.5.7 1.5 1.5v9c0 .8-.7 1.5-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="13" r="3.2"/></svg></span>
     <span data-i18n="dock_gallery">גלריה</span>
   </a>
-  <button onclick="closeAllPageScreens();tryBook()">
+  <button onclick="tryBook()">
     <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v6M9 16h6"/></svg></span>
     <span data-i18n="dock_book">קביעת תור</span>
   </button>
@@ -583,6 +583,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 <!-- ===== Settings screen ===== -->
 <div id="settingsScreen" class="page-screen">
   <div class="page-head">
+    <button class="icon-btn" onclick="closeSettings()">✕</button>
     <h2 data-i18n="settings_title">הגדרות</h2>
   </div>
   <div class="admin-wrap" id="settingsBody"></div>
@@ -591,6 +592,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 <!-- ===== My Booking screen ===== -->
 <div id="myBookingScreen" class="page-screen">
   <div class="page-head">
+    <button class="icon-btn" onclick="closeMyBooking()">✕</button>
     <h2 data-i18n="mybk_title">התור שלי</h2>
   </div>
   <div class="admin-wrap" id="myBookingBody"></div>
@@ -1036,17 +1038,16 @@ function openRegisterOrAccount(){
   openRegister(null);
 }
 
-function closeAllPageScreens(){
-  document.getElementById('settingsScreen').classList.remove('open');
-  document.getElementById('myBookingScreen').classList.remove('open');
-  document.body.style.overflow='';
-}
 function openSettings(){
-  closeAllPageScreens();
   renderSettings();
   document.getElementById('settingsScreen').classList.add('open');
   document.body.style.overflow='hidden';
   setActiveNav('navSettings');
+}
+function closeSettings(){
+  document.getElementById('settingsScreen').classList.remove('open');
+  document.body.style.overflow='';
+  updateActiveNavByScroll();
 }
 const LANGUAGES=[{key:'he',label:'עברית'},{key:'en',label:'English'},{key:'ru',label:'Русский'}];
 function renderSettings(){
@@ -1121,12 +1122,16 @@ async function syncMyBookingsFromServer(){
   }
 }
 async function openMyBooking(){
-  closeAllPageScreens();
   await syncMyBookingsFromServer();
   renderMyBooking();
   document.getElementById('myBookingScreen').classList.add('open');
   document.body.style.overflow='hidden';
   setActiveNav('navMyBk');
+}
+function closeMyBooking(){
+  document.getElementById('myBookingScreen').classList.remove('open');
+  document.body.style.overflow='';
+  updateActiveNavByScroll();
 }
 function cancelMyBooking(id){
   const b=state.bookings.find(x=>x.id===id);

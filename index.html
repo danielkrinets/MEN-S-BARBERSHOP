@@ -525,15 +525,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
     <span data-i18n="dock_home">בית</span>
     <span class="nav-dot" id="navDot"></span>
   </a>
-  <a href="#gallery" id="navGallery">
-    <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8.5C4 7.7 4.7 7 5.5 7H8l1-1.5A1.5 1.5 0 0 1 10.2 5h3.6c.5 0 1 .2 1.2.5L16 7h2.5c.8 0 1.5.7 1.5 1.5v9c0 .8-.7 1.5-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"/><circle cx="12" cy="13" r="3.2"/></svg></span>
-    <span data-i18n="dock_gallery">גלריה</span>
-  </a>
-  <button onclick="tryBook()">
-    <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v6M9 16h6"/></svg></span>
-    <span data-i18n="dock_book">קביעת תור</span>
-  </button>
-  <a href="#" id="navMyBk" class="hidden" onclick="openMyBooking();return false;">
+  <a href="#" id="navMyBk" onclick="openMyBooking();return false;">
     <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="2" fill="currentColor"/></svg></span>
     <span data-i18n="dock_mybooking">התור שלי</span>
   </a>
@@ -769,7 +761,7 @@ const I18N={
     location_maps_btn:'פתח בגוגל מפות', location_waze_btn:'פתח בוויז',
     tiktok_title:'עקבו אחרינו בטיקטוק', tiktok_cta:'לצפייה בעבודות',
     footer_contact:'צור קשר', footer_whatsapp:'וואטסאפ', footer_owned_by:'בבעלות', footer_admin:'כניסת מנהל',
-    dock_home:'בית', dock_gallery:'גלריה', dock_book:'קביעת תור', dock_mybooking:'התור שלי', dock_settings:'הגדרות',
+    dock_home:'בית', dock_mybooking:'התור שלי', dock_settings:'הגדרות',
     reg_title:'הרשמה', reg_name_label:'שם מלא', reg_name_ph:'לדוגמה: יוסי כהן', reg_phone_label:'טלפון נייד',
     reg_submit:'שלח קוד אימות SMS', reg_sending:'שולח...', reg_validation_err:'נא למלא שם ומספר טלפון תקין (לדוגמה 0501234567)', reg_send_err:'שגיאה בשליחת הקוד',
     reg_demo_title:'מצב הדגמה (DEMO)', reg_demo_body:'בשלב זה עדיין לא מחובר ספק SMS אמיתי, לכן הקוד מוצג כאן ישירות:',
@@ -813,7 +805,7 @@ const I18N={
     location_maps_btn:'Open in Google Maps', location_waze_btn:'Open in Waze',
     tiktok_title:'Follow us on TikTok', tiktok_cta:'See our work',
     footer_contact:'Contact', footer_whatsapp:'WhatsApp', footer_owned_by:'Owned by', footer_admin:'Admin login',
-    dock_home:'Home', dock_gallery:'Gallery', dock_book:'Book', dock_mybooking:'My Booking', dock_settings:'Settings',
+    dock_home:'Home', dock_mybooking:'My Booking', dock_settings:'Settings',
     reg_title:'Sign Up', reg_name_label:'Full name', reg_name_ph:'e.g. John Smith', reg_phone_label:'Mobile phone',
     reg_submit:'Send SMS Code', reg_sending:'Sending...', reg_validation_err:'Please enter a valid name and phone number (e.g. 0501234567)', reg_send_err:'Failed to send the code',
     reg_demo_title:'Demo Mode', reg_demo_body:'No real SMS provider is connected yet, so the code is shown here directly:',
@@ -857,7 +849,7 @@ const I18N={
     location_maps_btn:'Открыть в Google Maps', location_waze_btn:'Открыть в Waze',
     tiktok_title:'Подписывайтесь на наш TikTok', tiktok_cta:'Смотреть работы',
     footer_contact:'Связаться с нами', footer_whatsapp:'WhatsApp', footer_owned_by:'Владелец:', footer_admin:'Вход для администратора',
-    dock_home:'Главная', dock_gallery:'Галерея', dock_book:'Запись', dock_mybooking:'Мой визит', dock_settings:'Настройки',
+    dock_home:'Главная', dock_mybooking:'Мой визит', dock_settings:'Настройки',
     reg_title:'Регистрация', reg_name_label:'Полное имя', reg_name_ph:'Например: Иван Иванов', reg_phone_label:'Номер телефона',
     reg_submit:'Отправить SMS-код', reg_sending:'Отправка...', reg_validation_err:'Введите имя и корректный номер телефона (например 0501234567)', reg_send_err:'Не удалось отправить код',
     reg_demo_title:'Демо-режим', reg_demo_body:'Реальный SMS-провайдер пока не подключён, поэтому код показан прямо здесь:',
@@ -1018,17 +1010,14 @@ function updateBanner(){
   const bks=getMyBookings();
   const banner=document.getElementById('actBkBanner');
   const dot=document.getElementById('navDot');
-  const myBkNav=document.getElementById('navMyBk');
   if(bks.length>0){
     banner.classList.add('on');
     const today=todayIso();
     const next=[...bks].sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''))
       .find(b=>b.date>=today) || bks[0];
     document.getElementById('actBkTxt').textContent = `${next.service} · ${next.date} · ${next.time}`;
-    myBkNav.classList.remove('hidden');
   }else{
     banner.classList.remove('on');
-    myBkNav.classList.add('hidden');
   }
   dot.classList.toggle('on', bks.length>0);
 }
@@ -1242,8 +1231,7 @@ function updateActiveNavByScroll(){
   if(document.getElementById('myBookingScreen').classList.contains('open')) return;
   if(document.getElementById('adminScreen').classList.contains('open')) return;
   if(document.getElementById('wizScreen').classList.contains('open')) return;
-  const galleryTop=document.getElementById('gallery').getBoundingClientRect().top;
-  setActiveNav(galleryTop > window.innerHeight*0.55 ? 'navHome' : 'navGallery');
+  setActiveNav('navHome');
 }
 
 const GALLERY_COUNT=8;

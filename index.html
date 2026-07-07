@@ -405,7 +405,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
     </div>
     <span class="section-label">MEN'S BARBERSHOP</span>
     <h1><span data-i18n="hero_title_l1">תספורת בסטנדרט גבוה,</span><br><span data-i18n="hero_title_l2">לגבר שיודע מה הוא רוצה.</span></h1>
-    <p><span data-i18n="hero_lead">קביעת תור אונליין, טיפוח וטיפולי VIP במקום אחד.</span> <span data-i18n="hero_owner_prefix">בעלים:</span> <span data-owner-name>נתאנאל דיין</span></p>
+    <p><span data-i18n="hero_lead">קביעת תור אונליין, טיפוח וטיפולי VIP במקום אחד.</span> <span data-i18n="hero_owner_prefix">בעלים:</span> <span data-owner-name>נתנאל דיין</span></p>
     <div class="hero-ctas">
       <button class="btn btn-primary btn-hero" data-i18n="hero_book_now" onclick="tryBook()">קבע תור עכשיו</button>
       <a class="btn btn-outline" data-i18n="hero_follow_tiktok" data-tiktok-href href="https://www.tiktok.com/@.mans_barber" target="_blank" rel="noopener">עקבו בטיקטוק</a>
@@ -505,7 +505,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
       </div>
     </div>
     <div class="footer-meta">
-      <p><span data-i18n="footer_owned_by">בבעלות</span> <span data-owner-name>נתאנאל דיין</span></p>
+      <p><span data-i18n="footer_owned_by">בבעלות</span> <span data-owner-name>נתנאל דיין</span></p>
       <p>© <span id="year"></span> Men's Barbershop</p>
       <a href="https://website-six-vert-48.vercel.app/admin" target="_blank" rel="noopener" class="footer-admin-link" data-i18n="footer_admin">כניסת מנהל</a>
     </div>
@@ -910,7 +910,7 @@ async function apiPost(path, data){
 const DEFAULT_SETTINGS={
   pin:'1234',
   language:'he',
-  ownerName:'נתאנאל דיין',
+  ownerName:'נתנאל דיין',
   phone:'0507485728',
   tiktokHandle:'@.mans_barber',
   address:'',
@@ -1079,7 +1079,20 @@ function renderSettings(){
     <div class="footer-meta" style="text-align:center;padding-bottom:20px">${tr('footer_owned_by')} ${state.settings.ownerName} · Men's Barbershop</div>`;
 }
 
-function openMyBooking(){
+async function syncMyBookingsFromServer(){
+  if(!state.currentUser) return;
+  try{
+    const data=await apiPost('/api/my-bookings',{phone:state.currentUser.phone});
+    state.bookings=state.bookings.filter(b=>b.clientPhone!==state.currentUser.phone);
+    data.bookings.forEach(b=>state.bookings.push(b));
+    persist();
+    updateBanner();
+  }catch{
+    // offline or not yet verified on this device: keep whatever is cached locally
+  }
+}
+async function openMyBooking(){
+  await syncMyBookingsFromServer();
   renderMyBooking();
   document.getElementById('myBookingScreen').classList.add('open');
   document.body.style.overflow='hidden';
@@ -1330,6 +1343,7 @@ async function verifyRegister(){
     const wasEditing=!!state.currentUser;
     state.currentUser={name:regPending.name, phone:regPending.phone, verifiedAt:Date.now()};
     upsertClient(state.currentUser);
+    await syncMyBookingsFromServer();
     persist(); renderHeader();
     closeSheet('regSheet');
     showToast(wasEditing? tr('reg_updated_toast') : trf('reg_welcome_toast',{name:state.currentUser.name}));

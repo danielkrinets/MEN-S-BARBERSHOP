@@ -762,6 +762,7 @@ const I18N={
     reg_code_label:'הזן קוד בן 4 ספרות', reg_verify_btn:'אמת והירשם', reg_verifying:'מאמת...', reg_code_err:'קוד שגוי', reg_get_code_telegram:'קבל קוד בטלגרם', reg_check_bot:'לחצו למטה כדי לקבל את הקוד מהבוט בטלגרם',
     reg_check_bot_msg:'בדקו את ההודעה מהבוט בטלגרם', reg_resend_in:'שליחה חוזרת בעוד {n} שניות', reg_resend_btn:'שלח קוד חדש',
     reg_updated_toast:'הפרטים עודכנו בהצלחה', reg_welcome_toast:'נרשמת בהצלחה! ברוך הבא, {name}',
+    reg_welcome_back_toast:'ברוך שובך, {name}!', reg_new_here:'זו הפעם הראשונה שלך אצלנו — איך קוראים לך?', reg_finish_btn:'סיום',
     settings_title:'הגדרות', settings_account:'חשבון', settings_edit:'עריכה', settings_logout:'התנתקות',
     settings_not_logged_in:'לא מחובר', settings_register:'הרשמה', settings_about:'אודות המספרה',
     settings_call:'התקשר', settings_open:'פתח', settings_tiktok:'טיקטוק', settings_language:'שפה',
@@ -804,6 +805,7 @@ const I18N={
     reg_code_label:'Enter the 4-digit code', reg_verify_btn:'Verify & Sign Up', reg_verifying:'Verifying...', reg_code_err:'Incorrect code', reg_get_code_telegram:'Get code via Telegram', reg_check_bot:'Tap below to get your code from the Telegram bot',
     reg_check_bot_msg:'Check the message from the Telegram bot', reg_resend_in:'Resend in {n}s', reg_resend_btn:'Send new code',
     reg_updated_toast:'Details updated successfully', reg_welcome_toast:'Signed up successfully! Welcome, {name}',
+    reg_welcome_back_toast:'Welcome back, {name}!', reg_new_here:'First time here, what is your name?', reg_finish_btn:'Finish',
     settings_title:'Settings', settings_account:'Account', settings_edit:'Edit', settings_logout:'Log out',
     settings_not_logged_in:'Not signed in', settings_register:'Sign up', settings_about:'About the shop',
     settings_call:'Call', settings_open:'Open', settings_tiktok:'TikTok', settings_language:'Language',
@@ -846,6 +848,7 @@ const I18N={
     reg_code_label:'Введите 4-значный код', reg_verify_btn:'Подтвердить и зарегистрироваться', reg_verifying:'Проверка...', reg_code_err:'Неверный код', reg_get_code_telegram:'Получить код в Telegram', reg_check_bot:'Нажмите ниже, чтобы получить код у бота в Telegram',
     reg_check_bot_msg:'Проверьте сообщение от бота в Telegram', reg_resend_in:'Повторная отправка через {n} сек', reg_resend_btn:'Отправить новый код',
     reg_updated_toast:'Данные успешно обновлены', reg_welcome_toast:'Регистрация прошла успешно! Добро пожаловать, {name}',
+    reg_welcome_back_toast:'С возвращением, {name}!', reg_new_here:'Вы здесь впервые — как вас зовут?', reg_finish_btn:'Готово',
     settings_title:'Настройки', settings_account:'Аккаунт', settings_edit:'Изменить', settings_logout:'Выйти',
     settings_not_logged_in:'Вы не вошли', settings_register:'Регистрация', settings_about:'О барбершопе',
     settings_call:'Позвонить', settings_open:'Открыть', settings_tiktok:'TikTok', settings_language:'Язык',
@@ -1270,21 +1273,26 @@ function renderServices(){
   });
 }
 
-let regPending=null, regThenBook=null;
+let regPending=null, regThenBook=null, regIsEditMode=false;
 function openRegister(thenServiceId, prefill){
   regThenBook=thenServiceId;
-  document.getElementById('regBody').innerHTML=`
-    <div class="field"><label>${tr('reg_name_label')}</label><input id="regName" type="text" placeholder="${tr('reg_name_ph')}" value="${prefill?prefill.name:''}"></div>
-    <div class="field"><label>${tr('reg_phone_label')}</label><input id="regPhone" type="tel" placeholder="0501234567" value="${prefill?prefill.phone:''}"></div>
+  regIsEditMode=!!prefill;
+  document.getElementById('regBody').innerHTML = regIsEditMode ? `
+    <div class="field"><label>${tr('reg_name_label')}</label><input id="regName" type="text" placeholder="${tr('reg_name_ph')}" value="${prefill.name}"></div>
+    <div class="field"><label>${tr('reg_phone_label')}</label><input id="regPhone" type="tel" placeholder="0501234567" value="${prefill.phone}"></div>
+    <p class="error-text hidden" id="regErr"></p>
+    <button class="btn btn-primary btn-full" id="regSubmitBtn" style="margin-top:8px" onclick="submitRegister()">${tr('reg_submit')}</button>` : `
+    <div class="field"><label>${tr('reg_phone_label')}</label><input id="regPhone" type="tel" placeholder="0501234567"></div>
     <p class="error-text hidden" id="regErr"></p>
     <button class="btn btn-primary btn-full" id="regSubmitBtn" style="margin-top:8px" onclick="submitRegister()">${tr('reg_submit')}</button>`;
   openSheet('regSheet');
 }
 async function submitRegister(){
-  const name=document.getElementById('regName').value.trim();
+  const nameField=document.getElementById('regName');
+  const name=nameField?nameField.value.trim():'';
   const phone=document.getElementById('regPhone').value.trim().replace(/[\s-]/g,'');
   const err=document.getElementById('regErr');
-  if(!name||!/^0\d{8,9}$/.test(phone)){err.textContent=tr('reg_validation_err');err.classList.remove('hidden');return;}
+  if(!/^0\d{8,9}$/.test(phone) || (regIsEditMode && !name)){err.textContent=tr('reg_validation_err');err.classList.remove('hidden');return;}
   err.classList.add('hidden');
   const btn=document.getElementById('regSubmitBtn');
   btn.disabled=true; btn.textContent=tr('reg_sending');
@@ -1381,23 +1389,51 @@ async function verifyRegister(){
   btn.disabled=true; btn.textContent=tr('reg_verifying');
   try{
     await apiPost('/api/otp/verify',{phone:regPending.phone, code});
-    await apiPost('/api/register',{name:regPending.name, phone:regPending.phone});
-    clearInterval(otpResendInterval);
-    const wasEditing=!!state.currentUser;
-    state.currentUser={name:regPending.name, phone:regPending.phone, verifiedAt:Date.now()};
-    upsertClient(state.currentUser);
-    await syncMyBookingsFromServer();
-    persist(); renderHeader();
-    closeSheet('regSheet');
-    showToast(wasEditing? tr('reg_updated_toast') : trf('reg_welcome_toast',{name:state.currentUser.name}));
-    if(document.getElementById('settingsScreen').classList.contains('open')) renderSettings();
-    const svcId=regThenBook; regThenBook=null;
-    if(svcId!==null) setTimeout(()=>openWizard(svcId),250);
+    const data=await apiPost('/api/register',{phone:regPending.phone, name:regPending.name});
+    await completeSignIn(data.client, data.isNew);
   }catch(e){
+    if(e.message==='NAME_REQUIRED'){ renderNameStep(); return; }
     err.textContent=e.message||tr('reg_code_err');
     err.classList.remove('hidden');
     btn.disabled=false; btn.textContent=tr('reg_verify_btn');
   }
+}
+function renderNameStep(){
+  document.getElementById('regBody').innerHTML=`
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">${tr('reg_new_here')}</p>
+    <div class="field"><label>${tr('reg_name_label')}</label><input id="regFinalName" type="text" placeholder="${tr('reg_name_ph')}"></div>
+    <p class="error-text hidden" id="regErr3"></p>
+    <button class="btn btn-primary btn-full" onclick="finishRegistration()">${tr('reg_finish_btn')}</button>`;
+}
+async function finishRegistration(){
+  const name=document.getElementById('regFinalName').value.trim();
+  const err=document.getElementById('regErr3');
+  if(!name){ err.textContent=tr('reg_validation_err'); err.classList.remove('hidden'); return; }
+  err.classList.add('hidden');
+  try{
+    const data=await apiPost('/api/register',{phone:regPending.phone, name});
+    await completeSignIn(data.client, data.isNew);
+  }catch(e){
+    err.textContent=e.message||tr('reg_send_err');
+    err.classList.remove('hidden');
+  }
+}
+async function completeSignIn(client, isNew){
+  clearInterval(otpResendInterval);
+  const wasEditing=regIsEditMode;
+  state.currentUser={name:client.name, phone:client.phone, verifiedAt:Date.now()};
+  upsertClient(state.currentUser);
+  await syncMyBookingsFromServer();
+  persist(); renderHeader();
+  closeSheet('regSheet');
+  showToast(
+    wasEditing ? tr('reg_updated_toast')
+    : isNew ? trf('reg_welcome_toast',{name:client.name})
+    : trf('reg_welcome_back_toast',{name:client.name})
+  );
+  if(document.getElementById('settingsScreen').classList.contains('open')) renderSettings();
+  const svcId=regThenBook; regThenBook=null;
+  if(svcId!==null) setTimeout(()=>openWizard(svcId),250);
 }
 function upsertClient(u){
   const existing=state.clients.find(c=>c.phone===u.phone);

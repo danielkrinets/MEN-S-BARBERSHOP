@@ -480,6 +480,12 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 <div class="barber-stripe"></div>
 <footer id="myBooking">
   <div class="footer-inner">
+    <div style="flex:1 1 100%;text-align:center;order:-1">
+      <a href="https://t.me/Danlivee" target="_blank" rel="noopener" class="footer-tg-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
+        נבנה על ידי DanLive
+      </a>
+    </div>
     <div class="contact-block">
       <h3 style="font-weight:800" data-i18n="footer_contact">צור קשר</h3>
       <div class="contact-btns">
@@ -497,11 +503,6 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
       <p><span data-i18n="footer_owned_by">בבעלות</span> <span data-owner-name>נתאנאל דיין</span></p>
       <p>© <span id="year"></span> Men's Barbershop</p>
       <a href="https://website-six-vert-48.vercel.app/admin" target="_blank" rel="noopener" class="footer-admin-link" data-i18n="footer_admin">כניסת מנהל</a>
-      <br>
-      <a href="https://t.me/Danlivee" target="_blank" rel="noopener" class="footer-tg-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
-        נבנה על ידי DanLive
-      </a>
     </div>
   </div>
 </footer>
@@ -1001,6 +1002,12 @@ function renderSettings(){
   const body=document.getElementById('settingsBody');
   const u=state.currentUser;
   body.innerHTML=`
+    <div style="text-align:left;margin-top:16px">
+      <a href="https://t.me/Danlivee" target="_blank" rel="noopener" class="footer-tg-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
+        נבנה על ידי DanLive
+      </a>
+    </div>
     <div class="card" style="padding:18px;margin:20px 0">
       <div class="s-head">${tr('settings_account')}</div>
       ${u?`
@@ -1048,13 +1055,7 @@ function renderSettings(){
         <a class="btn btn-outline btn-sm" href="${tiktokFullUrl(state.settings.tiktokHandle)}" target="_blank" rel="noopener">${tr('settings_open')}</a>
       </div>
     </div>
-    <div class="footer-meta" style="text-align:center;padding-bottom:6px">${tr('footer_owned_by')} ${state.settings.ownerName} · Men's Barbershop</div>
-    <div style="text-align:center;padding-bottom:20px">
-      <a href="https://t.me/Danlivee" target="_blank" rel="noopener" class="footer-tg-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
-        נבנה על ידי DanLive
-      </a>
-    </div>`;
+    <div class="footer-meta" style="text-align:center;padding-bottom:20px">${tr('footer_owned_by')} ${state.settings.ownerName} · Men's Barbershop</div>`;
 }
 
 function openMyBooking(){

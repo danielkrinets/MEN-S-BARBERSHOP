@@ -743,7 +743,7 @@ const I18N={
     reg_submit:'שלח קוד אימות SMS', reg_sending:'שולח...', reg_validation_err:'נא למלא שם ומספר טלפון תקין (לדוגמה 0501234567)', reg_send_err:'שגיאה בשליחת הקוד',
     reg_demo_title:'מצב הדגמה (DEMO)', reg_demo_body:'בשלב זה עדיין לא מחובר ספק SMS אמיתי, לכן הקוד מוצג כאן ישירות:',
     reg_sms_sent:'שלחנו קוד אימות בן 4 ספרות למספר {phone} בהודעת SMS.',
-    reg_code_label:'הזן קוד בן 4 ספרות', reg_verify_btn:'אמת והירשם', reg_verifying:'מאמת...', reg_code_err:'קוד שגוי',
+    reg_code_label:'הזן קוד בן 4 ספרות', reg_verify_btn:'אמת והירשם', reg_verifying:'מאמת...', reg_code_err:'קוד שגוי', reg_get_code_telegram:'קבל קוד בטלגרם',
     reg_updated_toast:'הפרטים עודכנו בהצלחה', reg_welcome_toast:'נרשמת בהצלחה! ברוך הבא, {name}',
     settings_title:'הגדרות', settings_account:'חשבון', settings_edit:'עריכה', settings_logout:'התנתקות',
     settings_not_logged_in:'לא מחובר', settings_register:'הרשמה', settings_about:'אודות המספרה',
@@ -784,7 +784,7 @@ const I18N={
     reg_submit:'Send SMS Code', reg_sending:'Sending...', reg_validation_err:'Please enter a valid name and phone number (e.g. 0501234567)', reg_send_err:'Failed to send the code',
     reg_demo_title:'Demo Mode', reg_demo_body:'No real SMS provider is connected yet, so the code is shown here directly:',
     reg_sms_sent:'We sent a 4-digit verification code to {phone} by SMS.',
-    reg_code_label:'Enter the 4-digit code', reg_verify_btn:'Verify & Sign Up', reg_verifying:'Verifying...', reg_code_err:'Incorrect code',
+    reg_code_label:'Enter the 4-digit code', reg_verify_btn:'Verify & Sign Up', reg_verifying:'Verifying...', reg_code_err:'Incorrect code', reg_get_code_telegram:'Get code via Telegram',
     reg_updated_toast:'Details updated successfully', reg_welcome_toast:'Signed up successfully! Welcome, {name}',
     settings_title:'Settings', settings_account:'Account', settings_edit:'Edit', settings_logout:'Log out',
     settings_not_logged_in:'Not signed in', settings_register:'Sign up', settings_about:'About the shop',
@@ -825,7 +825,7 @@ const I18N={
     reg_submit:'Отправить SMS-код', reg_sending:'Отправка...', reg_validation_err:'Введите имя и корректный номер телефона (например 0501234567)', reg_send_err:'Не удалось отправить код',
     reg_demo_title:'Демо-режим', reg_demo_body:'Реальный SMS-провайдер пока не подключён, поэтому код показан прямо здесь:',
     reg_sms_sent:'Мы отправили 4-значный код подтверждения на номер {phone} по SMS.',
-    reg_code_label:'Введите 4-значный код', reg_verify_btn:'Подтвердить и зарегистрироваться', reg_verifying:'Проверка...', reg_code_err:'Неверный код',
+    reg_code_label:'Введите 4-значный код', reg_verify_btn:'Подтвердить и зарегистрироваться', reg_verifying:'Проверка...', reg_code_err:'Неверный код', reg_get_code_telegram:'Получить код в Telegram',
     reg_updated_toast:'Данные успешно обновлены', reg_welcome_toast:'Регистрация прошла успешно! Добро пожаловать, {name}',
     settings_title:'Настройки', settings_account:'Аккаунт', settings_edit:'Изменить', settings_logout:'Выйти',
     settings_not_logged_in:'Вы не вошли', settings_register:'Регистрация', settings_about:'О барбершопе',
@@ -1259,6 +1259,10 @@ async function submitRegister(){
         <b>${tr('reg_demo_title')}</b>
         ${tr('reg_demo_body')} <span class="demo-code">${data.code}</span>
       </div>`:`<p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">${trf('reg_sms_sent',{phone})}</p>`}
+      ${data.telegramBot?`<a href="https://t.me/${data.telegramBot}?start=${phone}" target="_blank" rel="noopener" class="footer-tg-link" style="margin-bottom:16px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
+        ${tr('reg_get_code_telegram')}
+      </a>`:''}
       <div class="field"><label>${tr('reg_code_label')}</label><input id="regCode" class="otp-input" type="text" inputmode="numeric" maxlength="4"></div>
       <p class="error-text hidden" id="regErr2"></p>
       <button class="btn btn-primary btn-full" id="regVerifyBtn" style="margin-top:8px" onclick="verifyRegister()">${tr('reg_verify_btn')}</button>`;

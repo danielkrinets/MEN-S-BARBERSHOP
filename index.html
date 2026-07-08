@@ -527,7 +527,8 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
       <p><span data-i18n="footer_owned_by">בבעלות</span> <span data-owner-name>נתנאל דיין</span></p>
       <p>© <span id="year"></span> Men's Barbershop</p>
       <a href="https://website-six-vert-48.vercel.app/admin" target="_blank" rel="noopener" class="footer-admin-link" data-i18n="footer_admin">כניסת מנהל</a>
-      <p style="font-size:.65rem;color:#444;margin-top:4px">v0.9.2</p>
+      <a href="#" onclick="openTerms();return false;" class="footer-admin-link" data-i18n="footer_terms">תנאי שימוש</a>
+      <p style="font-size:.65rem;color:#444;margin-top:4px">v0.9.4</p>
     </div>
   </div>
 </footer>
@@ -599,6 +600,28 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
     <h2 data-i18n="mybk_title">התור שלי</h2>
   </div>
   <div class="admin-wrap" id="myBookingBody"></div>
+</div>
+
+<!-- ===== Terms of use screen ===== -->
+<div id="termsScreen" class="page-screen">
+  <div class="page-head">
+    <button class="back-link" onclick="closeTerms()">‹ <span data-i18n="nav_back">חזרה</span></button>
+    <h2 data-i18n="terms_title">תנאי שימוש</h2>
+  </div>
+  <div class="admin-wrap" style="max-width:640px">
+    <h3 style="font-weight:800;margin:20px 0 6px" data-i18n="terms_h_general">כללי</h3>
+    <p style="color:var(--muted);line-height:1.7" data-i18n="terms_p_general">השימוש באתר ובשירותי קביעת התורים מהווה הסכמה לתנאים אלו. האתר משמש להצגת שירותי המספרה ולקביעת תורים בלבד, ואינו מהווה כל התחייבות מעבר לכך.</p>
+    <h3 style="font-weight:800;margin:20px 0 6px" data-i18n="terms_h_booking">קביעת תורים וביטולים</h3>
+    <p style="color:var(--muted);line-height:1.7" data-i18n="terms_p_booking">קביעת תור מותנית באימות מספר טלפון. המספרה רשאית לשנות, לדחות או לבטל תור מסיבות תפעוליות, ותעשה מאמץ סביר ליידע את הלקוח מראש. לקוח המבקש לבטל או לשנות תור מתבקש לעדכן בהקדם האפשרי.</p>
+    <h3 style="font-weight:800;margin:20px 0 6px" data-i18n="terms_h_privacy">פרטיות ומידע אישי</h3>
+    <p style="color:var(--muted);line-height:1.7" data-i18n="terms_p_privacy">לצורך הרשמה וקביעת תורים נשמרים שם ומספר טלפון בלבד. המידע משמש לניהול התורים והתקשרות עם הלקוח, ואינו מועבר לצד שלישי למטרות שיווקיות. ניתן לבקש מחיקת חשבון וכל המידע הנלווה אליו בכל עת דרך האתר.</p>
+    <h3 style="font-weight:800;margin:20px 0 6px" data-i18n="terms_h_liability">אחריות</h3>
+    <p style="color:var(--muted);line-height:1.7" data-i18n="terms_p_liability">האתר מוצג כפי שהוא (as-is). המספרה עושה מאמץ לשמור על דיוק המידע המוצג (שירותים, מחירים, שעות פעילות) אך אינה אחראית לנזק עקיף כלשהו כתוצאה משימוש באתר.</p>
+    <h3 style="font-weight:800;margin:20px 0 6px" data-i18n="terms_h_changes">שינויים בתנאים</h3>
+    <p style="color:var(--muted);line-height:1.7" data-i18n="terms_p_changes">המספרה רשאית לעדכן תנאים אלו מעת לעת. המשך השימוש באתר לאחר עדכון מהווה הסכמה לתנאים המעודכנים.</p>
+    <h3 style="font-weight:800;margin:20px 0 6px" data-i18n="terms_h_contact">יצירת קשר</h3>
+    <p style="color:var(--muted);line-height:1.7;margin-bottom:30px" data-i18n="terms_p_contact">לשאלות בנוגע לתנאים אלו ניתן ליצור קשר בפרטים המופיעים בתחתית האתר.</p>
+  </div>
 </div>
 
 <!-- ===== Admin screen ===== -->
@@ -775,7 +798,14 @@ const I18N={
     location_addr_title:'כתובת המספרה', location_addr_fallback:'להשלמה על ידי בעל העסק',
     location_maps_btn:'פתח בגוגל מפות', location_waze_btn:'פתח בוויז',
     tiktok_title:'עקבו אחרינו בטיקטוק', tiktok_cta:'לצפייה בעבודות',
-    footer_contact:'צור קשר', footer_whatsapp:'וואטסאפ', footer_owned_by:'בבעלות', footer_admin:'כניסת מנהל',
+    footer_contact:'צור קשר', footer_whatsapp:'וואטסאפ', footer_owned_by:'בבעלות', footer_admin:'כניסת מנהל', footer_terms:'תנאי שימוש',
+    terms_title:'תנאי שימוש',
+    terms_h_general:'כללי', terms_p_general:'השימוש באתר ובשירותי קביעת התורים מהווה הסכמה לתנאים אלו. האתר משמש להצגת שירותי המספרה ולקביעת תורים בלבד, ואינו מהווה כל התחייבות מעבר לכך.',
+    terms_h_booking:'קביעת תורים וביטולים', terms_p_booking:'קביעת תור מותנית באימות מספר טלפון. המספרה רשאית לשנות, לדחות או לבטל תור מסיבות תפעוליות, ותעשה מאמץ סביר ליידע את הלקוח מראש. לקוח המבקש לבטל או לשנות תור מתבקש לעדכן בהקדם האפשרי.',
+    terms_h_privacy:'פרטיות ומידע אישי', terms_p_privacy:'לצורך הרשמה וקביעת תורים נשמרים שם ומספר טלפון בלבד. המידע משמש לניהול התורים והתקשרות עם הלקוח, ואינו מועבר לצד שלישי למטרות שיווקיות. ניתן לבקש מחיקת חשבון וכל המידע הנלווה אליו בכל עת דרך האתר.',
+    terms_h_liability:'אחריות', terms_p_liability:'האתר מוצג כפי שהוא (as-is). המספרה עושה מאמץ לשמור על דיוק המידע המוצג (שירותים, מחירים, שעות פעילות) אך אינה אחראית לנזק עקיף כלשהו כתוצאה משימוש באתר.',
+    terms_h_changes:'שינויים בתנאים', terms_p_changes:'המספרה רשאית לעדכן תנאים אלו מעת לעת. המשך השימוש באתר לאחר עדכון מהווה הסכמה לתנאים המעודכנים.',
+    terms_h_contact:'יצירת קשר', terms_p_contact:'לשאלות בנוגע לתנאים אלו ניתן ליצור קשר בפרטים המופיעים בתחתית האתר.',
     dock_home:'בית', dock_mybooking:'התור שלי', dock_settings:'הגדרות',
     nav_back:'חזרה', nav_exit:'יציאה', nav_cancel:'ביטול',
     reg_title:'הרשמה', reg_name_label:'שם מלא', reg_name_ph:'לדוגמה: יוסי כהן', reg_phone_label:'טלפון נייד',
@@ -823,7 +853,14 @@ const I18N={
     location_addr_title:'Shop Address', location_addr_fallback:'To be filled in by the owner',
     location_maps_btn:'Open in Google Maps', location_waze_btn:'Open in Waze',
     tiktok_title:'Follow us on TikTok', tiktok_cta:'See our work',
-    footer_contact:'Contact', footer_whatsapp:'WhatsApp', footer_owned_by:'Owned by', footer_admin:'Admin login',
+    footer_contact:'Contact', footer_whatsapp:'WhatsApp', footer_owned_by:'Owned by', footer_admin:'Admin login', footer_terms:'Terms of use',
+    terms_title:'Terms of use',
+    terms_h_general:'General', terms_p_general:'Using this site and its booking service means you accept these terms. The site is used only to present the barbershop\'s services and to book appointments, and does not create any obligation beyond that.',
+    terms_h_booking:'Booking and cancellations', terms_p_booking:'Booking an appointment requires phone verification. The barbershop may change, postpone, or cancel an appointment for operational reasons, and will make a reasonable effort to notify the client in advance. Clients who wish to cancel or change an appointment are asked to update as early as possible.',
+    terms_h_privacy:'Privacy and personal data', terms_p_privacy:'Only a name and phone number are stored for registration and booking. This information is used to manage appointments and contact the client, and is not shared with third parties for marketing purposes. You can request deletion of your account and all associated data at any time via the site.',
+    terms_h_liability:'Liability', terms_p_liability:'The site is provided as-is. The barbershop makes an effort to keep displayed information (services, prices, hours) accurate, but is not liable for any indirect damage resulting from use of the site.',
+    terms_h_changes:'Changes to these terms', terms_p_changes:'The barbershop may update these terms from time to time. Continued use of the site after an update constitutes acceptance of the updated terms.',
+    terms_h_contact:'Contact', terms_p_contact:'For questions about these terms, please use the contact details shown at the bottom of the site.',
     dock_home:'Home', dock_mybooking:'My Booking', dock_settings:'Settings',
     nav_back:'Back', nav_exit:'Exit', nav_cancel:'Cancel',
     reg_title:'Sign Up', reg_name_label:'Full name', reg_name_ph:'e.g. John Smith', reg_phone_label:'Mobile phone',
@@ -871,7 +908,14 @@ const I18N={
     location_addr_title:'Адрес барбершопа', location_addr_fallback:'Будет заполнено владельцем',
     location_maps_btn:'Открыть в Google Maps', location_waze_btn:'Открыть в Waze',
     tiktok_title:'Подписывайтесь на наш TikTok', tiktok_cta:'Смотреть работы',
-    footer_contact:'Связаться с нами', footer_whatsapp:'WhatsApp', footer_owned_by:'Владелец:', footer_admin:'Вход для администратора',
+    footer_contact:'Связаться с нами', footer_whatsapp:'WhatsApp', footer_owned_by:'Владелец:', footer_admin:'Вход для администратора', footer_terms:'Условия использования',
+    terms_title:'Условия использования',
+    terms_h_general:'Общие положения', terms_p_general:'Использование сайта и сервиса записи означает согласие с этими условиями. Сайт служит только для показа услуг парикмахерской и записи на приём, и не создаёт никаких обязательств сверх этого.',
+    terms_h_booking:'Запись и отмена', terms_p_booking:'Запись на приём требует подтверждения номера телефона. Парикмахерская вправе изменить, перенести или отменить запись по операционным причинам и приложит разумные усилия, чтобы предупредить клиента заранее. Клиента, желающего отменить или перенести запись, просят сообщить об этом как можно раньше.',
+    terms_h_privacy:'Конфиденциальность и личные данные', terms_p_privacy:'Для регистрации и записи сохраняются только имя и номер телефона. Эта информация используется для управления записями и связи с клиентом и не передаётся третьим лицам в маркетинговых целях. Удалить аккаунт и все связанные с ним данные можно в любой момент прямо на сайте.',
+    terms_h_liability:'Ответственность', terms_p_liability:'Сайт предоставляется как есть. Парикмахерская прилагает усилия для поддержания точности отображаемой информации (услуги, цены, часы работы), но не несёт ответственности за какой-либо косвенный ущерб от использования сайта.',
+    terms_h_changes:'Изменения условий', terms_p_changes:'Парикмахерская может время от времени обновлять эти условия. Дальнейшее использование сайта после обновления означает согласие с обновлёнными условиями.',
+    terms_h_contact:'Связаться с нами', terms_p_contact:'По вопросам, связанным с этими условиями, используйте контактные данные, указанные внизу сайта.',
     dock_home:'Главная', dock_mybooking:'Мой визит', dock_settings:'Настройки',
     nav_back:'Назад', nav_exit:'Выход', nav_cancel:'Отмена',
     reg_title:'Регистрация', reg_name_label:'Полное имя', reg_name_ph:'Например: Иван Иванов', reg_phone_label:'Номер телефона',
@@ -1091,6 +1135,15 @@ function openSettings(){
   document.body.style.overflow='hidden';
   setActiveNav('navSettings');
 }
+function openTerms(){
+  closeAllPageScreens();
+  document.getElementById('termsScreen').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeTerms(){
+  document.getElementById('termsScreen').classList.remove('open');
+  document.body.style.overflow='';
+}
 const LANGUAGES=[{key:'he',label:'עברית'},{key:'en',label:'English'},{key:'ru',label:'Русский'}];
 function renderSettings(){
   const body=document.getElementById('settingsBody');
@@ -1264,6 +1317,7 @@ function renderMyBooking(){
 function closeAllPageScreens(){
   document.getElementById('settingsScreen').classList.remove('open');
   document.getElementById('myBookingScreen').classList.remove('open');
+  document.getElementById('termsScreen').classList.remove('open');
   document.body.style.overflow='';
 }
 function setActiveNav(id){

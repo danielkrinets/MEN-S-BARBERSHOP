@@ -709,10 +709,14 @@ const SERVICES = [
   {id:'haircut-beard', emoji:'🪒', name:'תספורת + עיצוב זקן', duration:'60 דקות', price:110, desc:''},
   {id:'vip-pamper-day', emoji:'✨', name:'יום פינוק VIP', duration:'שעתיים שלמות', price:300, featured:true, desc:''},
 ];
+function hoursForDate(iso){
+  if(state.dateOverrides[iso]) return state.dateOverrides[iso];
+  const dow=new Date(iso+'T00:00:00').getDay();
+  return state.workingHours[dow];
+}
 function timeSlotsForDate(iso){
   if(!iso) return [];
-  const dow=new Date(iso+'T00:00:00').getDay();
-  const h=state.workingHours[dow];
+  const h=hoursForDate(iso);
   if(!h || h.closed) return [];
   const [oh,om]=h.open.split(':').map(Number);
   const [ch,cm]=h.close.split(':').map(Number);
@@ -941,7 +945,7 @@ const DEFAULT_WORKING_HOURS={
   5:{open:'09:00',close:'19:30',closed:false},
   6:{open:'09:00',close:'19:30',closed:true},
 };
-const DEFAULTS={currentUser:null, clients:[], bookings:[], settings:{...DEFAULT_SETTINGS}, serviceOverrides:{}, workingHours:{...DEFAULT_WORKING_HOURS}};
+const DEFAULTS={currentUser:null, clients:[], bookings:[], settings:{...DEFAULT_SETTINGS}, serviceOverrides:{}, workingHours:{...DEFAULT_WORKING_HOURS}, dateOverrides:{}};
 function loadState(){
   try{
     const raw=localStorage.getItem(STORAGE_KEY);
@@ -953,6 +957,7 @@ function loadState(){
       settings:{...DEFAULT_SETTINGS, ...(parsed.settings||{})},
       serviceOverrides:{...(parsed.serviceOverrides||{})},
       workingHours:{...DEFAULT_WORKING_HOURS, ...(parsed.workingHours||{})},
+      dateOverrides:{...(parsed.dateOverrides||{})},
     };
   }catch{return structuredClone(DEFAULTS);}
 }
@@ -1538,7 +1543,7 @@ function renderWizPanel1(){
     const iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     const cellDate=new Date(y,m,d);
     const past=cellDate<today;
-    const dayClosed=(state.workingHours[cellDate.getDay()]||{}).closed;
+    const dayClosed=(hoursForDate(iso)||{}).closed;
     const disabled=past||dayClosed;
     const sel=wiz.date===iso;
     const isToday=iso===todayIsoStr;
@@ -1868,6 +1873,19 @@ async function adminApiDelete(path){
   return json;
 }
 
+function ownerAddDateOverride(){
+  const date=document.getElementById('opNewOverrideDate').value;
+  if(!date) return;
+  const closed=document.getElementById('opNewOverrideClosed').checked;
+  const open=document.getElementById('opNewOverrideOpen').value||'09:00';
+  const close=document.getElementById('opNewOverrideClose').value||'19:30';
+  state.dateOverrides[date]={closed, open, close};
+  renderOwnerSiteTab();
+}
+function ownerRemoveDateOverride(date){
+  delete state.dateOverrides[date];
+  renderOwnerSiteTab();
+}
 function renderOwnerSiteTab(){
   const s=state.settings;
   const body=document.getElementById('ownerTabContent');
@@ -1903,6 +1921,29 @@ function renderOwnerSiteTab(){
         <input type="time" id="opHoursClose${dow}" value="${h.close}" ${h.closed?'disabled':''} style="flex:1;min-width:100px;background:#000;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--fg);font-family:inherit">
       </div>`;
     }).join('')}
+
+    <p class="s-head" style="margin:24px 0 10px">חריגים לתאריכים ספציפיים (חגים, חופשות)</p>
+    ${Object.keys(state.dateOverrides).sort().map(date=>{
+      const o=state.dateOverrides[date];
+      return `
+      <div class="card" style="padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div><b>${date}</b> <span style="color:var(--muted);font-size:.85rem">${o.closed?'— סגור':`— ${o.open} עד ${o.close}`}</span></div>
+        <button class="btn btn-outline btn-sm" onclick="ownerRemoveDateOverride('${date}')">מחק</button>
+      </div>`;
+    }).join('') || '<p style="color:var(--muted);font-size:.85rem;margin-bottom:10px">אין חריגים כרגע.</p>'}
+    <div class="card" style="padding:14px;margin-bottom:24px">
+      <div class="field" style="margin-bottom:8px"><label>תאריך</label><input type="date" id="opNewOverrideDate"></div>
+      <label style="display:flex;align-items:center;gap:6px;font-weight:700;margin-bottom:10px">
+        <input type="checkbox" id="opNewOverrideClosed" checked onchange="document.getElementById('opNewOverrideHours').style.display=this.checked?'none':'flex'" style="width:16px;height:16px">
+        סגור ביום זה לגמרי
+      </label>
+      <div id="opNewOverrideHours" style="display:none;gap:10px;margin-bottom:10px">
+        <input type="time" id="opNewOverrideOpen" value="09:00" style="flex:1;background:#000;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--fg);font-family:inherit">
+        <span style="color:var(--muted);align-self:center">עד</span>
+        <input type="time" id="opNewOverrideClose" value="19:30" style="flex:1;background:#000;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--fg);font-family:inherit">
+      </div>
+      <button class="btn btn-outline btn-full" onclick="ownerAddDateOverride()">הוסף חריג</button>
+    </div>
 
     <p class="s-head" style="margin:24px 0 10px">שינוי קוד גישה (5 הקשות על הלוגו, ומשמש גם לתורים/לקוחות ול-/admin באתר)</p>
     <div class="field"><label>קוד נוכחי</label><input id="opCurPin" type="password" inputmode="numeric" maxlength="4"></div>
@@ -2182,6 +2223,7 @@ async function saveOwnerPanel(){
       address: state.settings.address,
       serviceOverrides: state.serviceOverrides,
       workingHours: state.workingHours,
+      dateOverrides: state.dateOverrides,
     });
     showToast('ההגדרות נשמרו בהצלחה לכולם');
   }catch(e){
@@ -2202,6 +2244,7 @@ async function loadSiteSettingsFromServer(){
       if(o) Object.assign(s,o);
     });
     if(remote.workingHours) state.workingHours={...DEFAULT_WORKING_HOURS, ...remote.workingHours};
+    state.dateOverrides=remote.dateOverrides||{};
     persist();
     renderSiteSettings();
     renderServices();

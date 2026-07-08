@@ -541,7 +541,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
   <div class="sheet-panel" style="max-height:70vh">
     <div class="sheet-handle-wrap" data-drag-handle><div class="sheet-handle"></div></div>
     <div class="sheet-header" data-drag-handle>
-      <span style="font-weight:800;font-size:1.1rem" data-i18n="reg_title">הרשמה</span>
+      <span style="font-weight:800;font-size:1.1rem" data-i18n="reg_title" id="regSheetTitle">הרשמה</span>
       <button class="icon-btn close-x-btn" onclick="closeSheet('regSheet')">✕</button>
     </div>
     <div id="regBody" style="padding:0 20px 24px;overflow-y:auto;flex:1;min-height:0"></div>
@@ -776,6 +776,8 @@ const I18N={
     reg_updated_toast:'הפרטים עודכנו בהצלחה', reg_welcome_toast:'נרשמת בהצלחה! ברוך הבא, {name}',
     reg_welcome_back_toast:'ברוך שובך, {name}!', reg_new_here:'זו הפעם הראשונה שלך אצלנו — איך קוראים לך?', reg_finish_btn:'סיום',
     settings_title:'הגדרות', settings_account:'חשבון', settings_edit:'עריכה', settings_logout:'התנתקות',
+    acct_delete_btn:'מחק את החשבון שלי', acct_delete_confirm:'לפני שממשיכים: מחיקת החשבון היא סופית ותמחק גם את כל היסטוריית התורים שלך. להמשיך?',
+    acct_delete_title:'מחיקת חשבון', acct_deleted_toast:'החשבון נמחק בהצלחה',
     settings_not_logged_in:'לא מחובר', settings_register:'הרשמה', settings_about:'אודות המספרה',
     settings_call:'התקשר', settings_open:'פתח', settings_tiktok:'טיקטוק', settings_language:'שפה',
     logout_toast:'התנתקת',
@@ -820,6 +822,8 @@ const I18N={
     reg_updated_toast:'Details updated successfully', reg_welcome_toast:'Signed up successfully! Welcome, {name}',
     reg_welcome_back_toast:'Welcome back, {name}!', reg_new_here:'First time here, what is your name?', reg_finish_btn:'Finish',
     settings_title:'Settings', settings_account:'Account', settings_edit:'Edit', settings_logout:'Log out',
+    acct_delete_btn:'Delete my account', acct_delete_confirm:'Before continuing: deleting your account is permanent and will also delete your entire booking history. Continue?',
+    acct_delete_title:'Delete account', acct_deleted_toast:'Account deleted successfully',
     settings_not_logged_in:'Not signed in', settings_register:'Sign up', settings_about:'About the shop',
     settings_call:'Call', settings_open:'Open', settings_tiktok:'TikTok', settings_language:'Language',
     logout_toast:'Logged out',
@@ -864,6 +868,8 @@ const I18N={
     reg_updated_toast:'Данные успешно обновлены', reg_welcome_toast:'Регистрация прошла успешно! Добро пожаловать, {name}',
     reg_welcome_back_toast:'С возвращением, {name}!', reg_new_here:'Вы здесь впервые — как вас зовут?', reg_finish_btn:'Готово',
     settings_title:'Настройки', settings_account:'Аккаунт', settings_edit:'Изменить', settings_logout:'Выйти',
+    acct_delete_btn:'Удалить мой аккаунт', acct_delete_confirm:'Перед тем как продолжить: удаление аккаунта необратимо и удалит всю историю ваших записей. Продолжить?',
+    acct_delete_title:'Удаление аккаунта', acct_deleted_toast:'Аккаунт успешно удалён',
     settings_not_logged_in:'Вы не вошли', settings_register:'Регистрация', settings_about:'О барбершопе',
     settings_call:'Позвонить', settings_open:'Открыть', settings_tiktok:'TikTok', settings_language:'Язык',
     logout_toast:'Вы вышли из аккаунта',
@@ -1063,6 +1069,9 @@ function renderSettings(){
         </div>
         <div class="s-row" style="border:none;padding-top:0">
           <button class="btn btn-outline btn-sm btn-full" onclick="logoutUser();renderSettings();">${tr('settings_logout')}</button>
+        </div>
+        <div class="s-row" style="border:none;padding-top:0">
+          <button class="btn btn-outline btn-sm btn-full" style="color:var(--accent);border-color:var(--accent)" onclick="openDeleteAccount()">${tr('acct_delete_btn')}</button>
         </div>`:`
         <div class="s-row" style="border:none">
           <div class="s-label" style="color:var(--muted)">${tr('settings_not_logged_in')}</div>
@@ -1324,6 +1333,8 @@ function renderServices(){
 
 let regPending=null, regThenBook=null, regIsEditMode=false;
 function openRegister(thenServiceId, prefill){
+  regFlowMode='register';
+  document.getElementById('regSheetTitle').textContent=tr('reg_title');
   regThenBook=thenServiceId;
   regIsEditMode=!!prefill;
   document.getElementById('regBody').innerHTML = regIsEditMode ? `
@@ -1362,7 +1373,7 @@ function renderOtpEntryStep(data, phone){
       : data.demo
         ? `<div class="demo-banner"><b>${tr('reg_demo_title')}</b>${tr('reg_demo_body')} <span class="demo-code">${data.code}</span></div>`
         : `<p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">${trf('reg_sms_sent',{phone})}</p>`}
-    ${data.telegramBot?`<a href="https://t.me/${data.telegramBot}?start=${phone}" target="_blank" rel="noopener" class="footer-tg-link" id="tgCodeBtn" style="margin-bottom:16px" onclick="onTelegramCodeClick()">
+    ${data.telegramBot?`<a href="https://t.me/${data.telegramBot}?start=${phone}_${state.settings.language}" target="_blank" rel="noopener" class="footer-tg-link" id="tgCodeBtn" style="margin-bottom:16px" onclick="onTelegramCodeClick()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 3.5 2.7 11c-.9.4-.9 1.6.1 1.9l4.8 1.5 1.9 6c.2.7 1.1.9 1.6.3l2.7-2.9 4.9 3.6c.7.5 1.7.1 1.9-.7l3.5-15.3c.2-.9-.7-1.6-1.5-1.3ZM9.2 13.6l9-6.5c.3-.2.6.2.3.4l-7.5 7.4c-.3.3-.5.7-.6 1.1l-.3 2.2-1.6-4.9c-.1-.3 0-.6.2-.7Z"/></svg>
       <span id="tgCodeBtnLabel">${tr('reg_get_code_telegram')}</span>
     </a>`:''}
@@ -1375,7 +1386,7 @@ function renderOtpEntryStep(data, phone){
       </div>
     </div>
     <p class="error-text hidden" id="regErr2"></p>
-    <button class="btn btn-primary btn-full" id="regVerifyBtn" style="margin-top:8px;margin-bottom:10px" onclick="verifyRegister()">${tr('reg_verify_btn')}</button>
+    <button class="btn btn-primary btn-full" id="regVerifyBtn" style="margin-top:8px;margin-bottom:10px" onclick="handleOtpVerifyClick()">${tr('reg_verify_btn')}</button>
     <p id="resendLine" style="color:var(--muted);font-size:.85rem;text-align:center"></p>`;
   initOtpCells('regCodeCells');
   startResendCountdown();
@@ -1430,6 +1441,11 @@ function initOtpCells(containerId){
 function getOtpValue(containerId){
   return [...document.querySelectorAll('#'+containerId+' .otp-cell')].map(c=>c.value).join('');
 }
+let regFlowMode='register';
+function handleOtpVerifyClick(){
+  if(regFlowMode==='delete') confirmDeleteAccount();
+  else verifyRegister();
+}
 async function verifyRegister(){
   const code=getOtpValue('regCodeCells');
   const err=document.getElementById('regErr2');
@@ -1442,6 +1458,60 @@ async function verifyRegister(){
     await completeSignIn(data.client, data.isNew);
   }catch(e){
     if(e.message==='NAME_REQUIRED'){ renderNameStep(); return; }
+    err.textContent=e.message||tr('reg_code_err');
+    err.classList.remove('hidden');
+    btn.disabled=false; btn.textContent=tr('reg_verify_btn');
+  }
+}
+function openDeleteAccount(){
+  if(!state.currentUser) return;
+  if(!confirm(tr('acct_delete_confirm'))) return;
+  regFlowMode='delete';
+  regPending={name:state.currentUser.name, phone:state.currentUser.phone};
+  requestDeleteAccountOtp();
+}
+async function requestDeleteAccountOtp(){
+  document.getElementById('regSheetTitle').textContent=tr('acct_delete_title');
+  document.getElementById('regBody').innerHTML=`<p style="color:var(--muted);font-size:.9rem;margin-bottom:16px">${tr('reg_sending')}</p>`;
+  openSheet('regSheet');
+  try{
+    const data=await apiPost('/api/otp/request',{phone:regPending.phone});
+    renderOtpEntryStep(data, regPending.phone);
+  }catch(e){
+    showToast(e.message||tr('reg_send_err'));
+    closeSheet('regSheet');
+    regFlowMode='register';
+  }
+}
+async function confirmDeleteAccount(){
+  const code=getOtpValue('regCodeCells');
+  const err=document.getElementById('regErr2');
+  err.classList.add('hidden');
+  const btn=document.getElementById('regVerifyBtn');
+  btn.disabled=true; btn.textContent=tr('reg_verifying');
+  try{
+    await apiPost('/api/otp/verify',{phone:regPending.phone, code});
+    let res;
+    try{
+      res=await fetch(API_BASE+'/api/account', {
+        method:'DELETE',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({phone:regPending.phone}),
+      });
+    }catch{ throw new Error(tr('err_no_connection')); }
+    const json=await res.json().catch(()=>({}));
+    if(!res.ok) throw new Error(json.error||tr('err_server'));
+    clearInterval(otpResendInterval);
+    state.bookings=state.bookings.filter(b=>b.clientPhone!==regPending.phone);
+    state.clients=state.clients.filter(c=>c.phone!==regPending.phone);
+    state.currentUser=null;
+    persist();
+    renderHeader();
+    closeSheet('regSheet');
+    regFlowMode='register';
+    showToast(tr('acct_deleted_toast'));
+    if(document.getElementById('settingsScreen').classList.contains('open')) renderSettings();
+  }catch(e){
     err.textContent=e.message||tr('reg_code_err');
     err.classList.remove('hidden');
     btn.disabled=false; btn.textContent=tr('reg_verify_btn');

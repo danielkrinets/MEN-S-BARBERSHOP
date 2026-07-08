@@ -460,16 +460,16 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
     <span class="section-label" data-i18n="location_label">מיקום</span>
     <h2 class="title" data-i18n="location_title">איפה נמצאים</h2>
     <div class="loc-grid">
-      <div class="loc-map">
+      <a class="loc-map" data-maps-href href="#" target="_blank" rel="noopener">
         <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-6.4-7-11.5A7 7 0 0 1 19 9.5C19 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
         <span data-i18n="location_map_placeholder">מפה (תתווסף לאחר קבלת הכתובת)</span>
-      </div>
+      </a>
       <div>
         <h3 style="font-weight:800;font-size:1.05rem" data-i18n="location_addr_title">כתובת המספרה</h3>
         <p style="color:var(--muted);margin-top:4px" data-address>להשלמה על ידי בעל העסק</p>
         <div class="loc-btns">
-          <span class="btn btn-outline btn-sm" data-i18n="location_maps_btn">פתח בגוגל מפות</span>
-          <span class="btn btn-outline btn-sm" data-i18n="location_waze_btn">פתח בוויז</span>
+          <a class="btn btn-outline btn-sm" data-maps-href href="#" target="_blank" rel="noopener" data-i18n="location_maps_btn">פתח בגוגל מפות</a>
+          <a class="btn btn-outline btn-sm" data-waze-href href="#" target="_blank" rel="noopener" data-i18n="location_waze_btn">פתח בוויז</a>
         </div>
       </div>
     </div>
@@ -917,6 +917,7 @@ function setLanguage(lang){
 }
 
 const API_BASE='https://website-six-vert-48.vercel.app';
+const GOOGLE_MAPS_URL='https://maps.app.goo.gl/zkU2oGHppqXiKZcA8';
 async function apiGet(path){
   const res = await fetch(API_BASE+path);
   if(!res.ok) throw new Error(tr('err_server'));
@@ -991,6 +992,8 @@ function renderSiteSettings(){
   document.querySelectorAll('[data-tiktok-href]').forEach(el=>{el.href=tiktokFullUrl(s.tiktokHandle);});
   document.querySelectorAll('[data-tiktok-handle]').forEach(el=>{el.textContent=s.tiktokHandle;});
   document.querySelectorAll('[data-address]').forEach(el=>{el.textContent=s.address||tr('location_addr_fallback');});
+  document.querySelectorAll('[data-maps-href]').forEach(el=>{el.href=GOOGLE_MAPS_URL;});
+  document.querySelectorAll('[data-waze-href]').forEach(el=>{el.href='https://waze.com/ul?q='+encodeURIComponent(s.address||'')+'&navigate=yes';});
 }
 
 function todayIso(){return new Date().toISOString().slice(0,10);}

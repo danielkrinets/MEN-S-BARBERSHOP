@@ -534,7 +534,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
 
 <nav class="bottom-nav">
   <div class="dock-highlight" id="dockHighlight"></div>
-  <a href="#top" class="active-tab" id="navHome" onclick="closeAllPageScreens()">
+  <a href="#top" class="active-tab" id="navHome" onclick="closeAllPageScreens();setActiveNav('navHome')">
     <span class="nav-icn-wrap"><svg class="icon nav-icn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-4.5a.5.5 0 0 1-.5-.5V15a2 2 0 0 0-2-2 2 2 0 0 0-2 2v5.5a.5.5 0 0 1-.5.5H4a1 1 0 0 1-1-1Z"/></svg></span>
     <span data-i18n="dock_home">בית</span>
     <span class="nav-dot" id="navDot"></span>
@@ -788,6 +788,7 @@ const I18N={
     reg_welcome_back_toast:'ברוך שובך, {name}!', reg_new_here:'זו הפעם הראשונה שלך אצלנו — איך קוראים לך?', reg_finish_btn:'סיום',
     settings_title:'הגדרות', settings_account:'חשבון', settings_edit:'עריכה', settings_logout:'התנתקות',
     acct_delete_btn:'מחק את החשבון שלי', acct_delete_confirm:'לפני שממשיכים: מחיקת החשבון היא סופית ותמחק גם את כל היסטוריית התורים שלך. להמשיך?',
+    settings_avatar_color:'צבע אייקון הפרופיל',
     acct_delete_title:'מחיקת חשבון', acct_deleted_toast:'החשבון נמחק בהצלחה',
     settings_not_logged_in:'לא מחובר', settings_register:'הרשמה', settings_about:'אודות המספרה',
     settings_call:'התקשר', settings_open:'פתח', settings_tiktok:'טיקטוק', settings_language:'שפה',
@@ -835,6 +836,7 @@ const I18N={
     reg_welcome_back_toast:'Welcome back, {name}!', reg_new_here:'First time here, what is your name?', reg_finish_btn:'Finish',
     settings_title:'Settings', settings_account:'Account', settings_edit:'Edit', settings_logout:'Log out',
     acct_delete_btn:'Delete my account', acct_delete_confirm:'Before continuing: deleting your account is permanent and will also delete your entire booking history. Continue?',
+    settings_avatar_color:'Profile icon color',
     acct_delete_title:'Delete account', acct_deleted_toast:'Account deleted successfully',
     settings_not_logged_in:'Not signed in', settings_register:'Sign up', settings_about:'About the shop',
     settings_call:'Call', settings_open:'Open', settings_tiktok:'TikTok', settings_language:'Language',
@@ -882,6 +884,7 @@ const I18N={
     reg_welcome_back_toast:'С возвращением, {name}!', reg_new_here:'Вы здесь впервые — как вас зовут?', reg_finish_btn:'Готово',
     settings_title:'Настройки', settings_account:'Аккаунт', settings_edit:'Изменить', settings_logout:'Выйти',
     acct_delete_btn:'Удалить мой аккаунт', acct_delete_confirm:'Перед тем как продолжить: удаление аккаунта необратимо и удалит всю историю ваших записей. Продолжить?',
+    settings_avatar_color:'Цвет иконки профиля',
     acct_delete_title:'Удаление аккаунта', acct_deleted_toast:'Аккаунт успешно удалён',
     settings_not_logged_in:'Вы не вошли', settings_register:'Регистрация', settings_about:'О барбершопе',
     settings_call:'Позвонить', settings_open:'Открыть', settings_tiktok:'TikTok', settings_language:'Язык',
@@ -954,7 +957,9 @@ const DEFAULT_SETTINGS={
   phone:'0507485728',
   tiktokHandle:'@.mans_barber',
   address:'',
+  avatarColor:'#c8102e',
 };
+const AVATAR_COLORS=['#c8102e','#2AABEE','#35c46a','#f5a623','#9b59b6','#f2f0ee'];
 const OWNER_DOW_LABELS=['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
 const DEFAULT_WORKING_HOURS={
   0:{open:'09:00',close:'19:30',closed:false},
@@ -1028,10 +1033,22 @@ function getMyBookings(){
   if(!state.currentUser) return [];
   return state.bookings.filter(b=>b.clientPhone===state.currentUser.phone && b.status!=='cancelled');
 }
+function applyAvatarColor(){
+  const avatarBtn=document.getElementById('userAvatarBtn');
+  avatarBtn.style.color=state.settings.avatarColor||DEFAULT_SETTINGS.avatarColor;
+  avatarBtn.style.borderColor=state.settings.avatarColor||DEFAULT_SETTINGS.avatarColor;
+}
+function setAvatarColor(color){
+  state.settings.avatarColor=color;
+  persist();
+  applyAvatarColor();
+  renderSettings();
+}
 function renderHeader(){
   const chip=document.getElementById('userChip');
   const regBtn=document.getElementById('registerBtnHeader');
   const avatarBtn=document.getElementById('userAvatarBtn');
+  applyAvatarColor();
   if(state.currentUser){
     chip.classList.remove('hidden');
     chip.innerHTML=tr('header_hello')+' <b>'+state.currentUser.name+'</b>';
@@ -1090,6 +1107,12 @@ function renderSettings(){
       ${u?`
         <div class="s-row" style="border:none">
           <div><div class="s-label">${u.name}</div><div class="s-sub">${u.phone}</div></div>
+        </div>
+        <div class="s-row" style="border:none;flex-direction:column;align-items:flex-start;gap:10px">
+          <div class="s-label">${tr('settings_avatar_color')}</div>
+          <div style="display:flex;gap:10px">
+            ${AVATAR_COLORS.map(c=>`<button onclick="setAvatarColor('${c}')" aria-label="${c}" style="width:32px;height:32px;border-radius:50%;background:${c};border:2px solid ${(state.settings.avatarColor||DEFAULT_SETTINGS.avatarColor)===c?'#fff':'transparent'};box-shadow:0 0 0 1px var(--border);cursor:pointer"></button>`).join('')}
+          </div>
         </div>
         <div class="s-row" style="border:none;padding-top:0">
           <button class="btn btn-outline btn-sm btn-full" onclick="logoutUser();renderSettings();">${tr('settings_logout')}</button>

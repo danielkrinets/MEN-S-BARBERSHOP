@@ -528,7 +528,7 @@ td{padding:10px 12px;border-top:1px solid var(--border)}
       <p>© <span id="year"></span> Men's Barbershop</p>
       <a href="https://website-six-vert-48.vercel.app/admin" target="_blank" rel="noopener" class="footer-admin-link" data-i18n="footer_admin">כניסת מנהל</a>
       <a href="#" onclick="openTerms();return false;" class="footer-admin-link" data-i18n="footer_terms">תנאי שימוש</a>
-      <p style="font-size:.65rem;color:#444;margin-top:4px">v0.9.4</p>
+      <p style="font-size:.65rem;color:#444;margin-top:4px">v0.9.5</p>
     </div>
   </div>
 </footer>
@@ -2114,6 +2114,12 @@ function renderOwnerSiteTab(){
       <button class="btn btn-outline btn-full" onclick="ownerAddDateOverride()">הוסף חריג</button>
     </div>
 
+    <p class="s-head" style="margin:24px 0 10px">התראות טלגרם על תורים חדשים</p>
+    <div class="card" style="padding:14px;margin-bottom:24px">
+      <p style="color:var(--muted);font-size:.85rem;margin-bottom:12px">חברו את הטלגרם שלכם כדי לקבל הודעה על כל תור חדש, עם כפתורי אישור/דחייה ישירות מהצ'אט.</p>
+      <a class="btn btn-primary btn-full" href="https://t.me/MensBarberShopBot?start=owner_${s.pin}_${s.language}" target="_blank" rel="noopener" style="background:#2AABEE;border-color:#2AABEE">חברו את הטלגרם שלי</a>
+    </div>
+
     <p class="s-head" style="margin:24px 0 10px">שינוי קוד גישה (5 הקשות על הלוגו, ומשמש גם לתורים/לקוחות ול-/admin באתר)</p>
     <div class="field"><label>קוד נוכחי</label><input id="opCurPin" type="password" inputmode="numeric" maxlength="4"></div>
     <div class="field"><label>קוד חדש (4 ספרות, השאירו ריק כדי לא לשנות)</label><input id="opNewPin" type="password" inputmode="numeric" maxlength="4"></div>
@@ -2160,10 +2166,13 @@ function renderOrderCard(b){
   return `
     <div class="card" style="padding:14px;margin-bottom:10px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-        <div>
-          <p style="font-weight:700">${b.clientName}</p>
-          <p style="font-size:.8rem;color:var(--muted)">${b.clientPhone} · ${b.service}</p>
-          <p style="font-size:.75rem;color:var(--muted);margin-top:2px">${b.paymentMethod==='cash'?'מזומן':'כרטיס אשראי'}</p>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          ${clientAvatarHtml({name:b.clientName,phone:b.clientPhone},32)}
+          <div>
+            <p style="font-weight:700">${b.clientName}</p>
+            <p style="font-size:.8rem;color:var(--muted)">${b.clientPhone} · ${b.service}</p>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:2px">${b.paymentMethod==='cash'?'מזומן':'כרטיס אשראי'}</p>
+          </div>
         </div>
         <span class="status-pill ${b.status}">${ORDER_STATUS_LABEL[b.status]||b.status}</span>
       </div>
@@ -2287,6 +2296,16 @@ async function setOrderStatus(id, status){
   }catch(e){ showToast(e.message); }
 }
 
+const AVATAR_PALETTE=['#c8102e','#2AABEE','#35c46a','#f5a623','#9b59b6','#e67e22','#1abc9c','#e84393'];
+function colorForSeed(seed){
+  let hash=0;
+  for(let i=0;i<seed.length;i++){ hash=(hash*31+seed.charCodeAt(i))>>>0; }
+  return AVATAR_PALETTE[hash%AVATAR_PALETTE.length];
+}
+function clientAvatarHtml(c,size){
+  const letter=(c.name||'?').trim().charAt(0).toUpperCase();
+  return `<div style="flex-shrink:0;width:${size}px;height:${size}px;border-radius:50%;background:${colorForSeed(c.phone||c.name||'')};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:${Math.round(size*0.45)}px">${letter}</div>`;
+}
 async function renderOwnerAccountsTab(){
   const el=document.getElementById('ownerTabContent');
   el.innerHTML='<p style="color:var(--muted);padding:20px 0">טוען לקוחות...</p>';
@@ -2296,12 +2315,15 @@ async function renderOwnerAccountsTab(){
       ? '<p style="color:var(--muted);padding:20px 0">אין לקוחות רשומים.</p>'
       : `<p class="s-head" style="margin:20px 0 10px">לקוחות (${data.clients.length})</p>` +
         data.clients.map(c=>`
-          <div class="card" style="padding:14px;margin-bottom:10px">
-            <p style="font-weight:700">${c.name} ${c.blocked?'<span class="status-pill cancelled" style="margin-right:6px">חסום</span>':''}</p>
-            <p style="font-size:.8rem;color:var(--muted);margin-bottom:10px">${c.phone} · ${c.bookingsCount} תורים · נרשם ${c.createdAt.slice(0,10)}</p>
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-outline btn-sm" onclick="toggleAccountBlock('${c.id}', ${c.blocked})">${c.blocked?'בטל חסימה':'חסום'}</button>
-              <button class="btn btn-outline btn-sm" style="color:var(--accent);border-color:var(--accent)" onclick="deleteAccount('${c.id}','${c.name.replace(/'/g,"\\'")}')">מחק לקוח</button>
+          <div class="card" style="padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start">
+            ${clientAvatarHtml(c,40)}
+            <div style="flex:1;min-width:0">
+              <p style="font-weight:700">${c.name} ${c.blocked?'<span class="status-pill cancelled" style="margin-right:6px">חסום</span>':''}</p>
+              <p style="font-size:.8rem;color:var(--muted);margin-bottom:10px">${c.phone} · ${c.bookingsCount} תורים · נרשם ${c.createdAt.slice(0,10)}</p>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-outline btn-sm" onclick="toggleAccountBlock('${c.id}', ${c.blocked})">${c.blocked?'בטל חסימה':'חסום'}</button>
+                <button class="btn btn-outline btn-sm" style="color:var(--accent);border-color:var(--accent)" onclick="deleteAccount('${c.id}','${c.name.replace(/'/g,"\\'")}')">מחק לקוח</button>
+              </div>
             </div>
           </div>`).join('');
   }catch(e){
